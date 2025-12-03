@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Choose Quiz Section</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(135deg, #6a5af9, #836fff);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 24px;
+            padding: 30px 35px 35px;
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 26px;
+            text-align: center;
+            color: #3b3b3b;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #777;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 18px;
+        }
+
+        .card {
+            background: linear-gradient(145deg, #ffffff, #f3f4ff);
+            border-radius: 18px;
+            padding: 18px 16px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            width: 140%;
+            height: 140%;
+            background: radial-gradient(circle at top right, rgba(130,111,255,0.35), transparent 60%);
+            top: -30%;
+            right: -40%;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 14px 30px rgba(0,0,0,0.16);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .title {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #3d3d7a;
+        }
+
+        .desc {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .btn, .start-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 18px;
+            background: #6a5af9;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: 0.25s;
+            position: relative;           
+             z-index: 10; 
+        }
+
+        .btn:hover, .start-btn:hover {
+            background: #5848d6;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Select Quiz Section</h1>
+    <p class="subtitle">
+        Branch: <strong>{{ branch }}</strong> ·
+        Choose a section to start assessing your skills.
+    </p>
+
+    <div class="cards">
+        {% for cat in categories %}
+        <div class="card">
+
+            <div class="icon">
+                {% if cat == "aptitude" %}🧠
+                {% elif cat == "dsa" %}📊
+                {% elif cat == "dbms" %}🗄️
+                {% elif cat == "os" %}⚙️
+                {% else %}✨
+                {% endif %}
+            </div>
+
+            <div class="title">{{ cat.upper() }}</div>
+
+            <div class="desc">
+                {% if cat == "aptitude" %}
+                    Test your logical & numerical thinking.
+                {% elif cat == "dsa" %}
+                    Check your core Data Structures & Algorithms.
+                {% elif cat == "dbms" %}
+                    Evaluate your understanding of databases.
+                {% elif cat == "os" %}
+                    Analyze your OS & system concept strength.
+                {% else %}
+                    A focused skill assessment section.
+                {% endif %}
+            </div>
+
+            <a href="/quiz/{{ cat }}" class="btn start-btn">Start Quiz</a>
+
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Details</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<div class="login-box">
+    <h2>Student Details</h2>
+
+    <form action="/form" method="POST">
+
+        <input type="text" name="branch" placeholder="Branch (CSE, ECE, etc)" required>
+
+        <input type="number" name="projects" placeholder="Number of Projects" required>
+
+        <input type="number" name="internships" placeholder="Internships Completed" required>
+
+        <input type="text" name="skills" placeholder="Your Skills (e.g., Python, SQL)" required>
+
+        <input type="number" name="confidence" placeholder="Confidence Level (1-10)" min="1" max="10" required>
+
+        <button type="submit">Save Details</button>
+    </form>
+
+</div>
+
+</body>
+</html>

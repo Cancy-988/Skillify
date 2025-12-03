@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Personalized Learning Path</title>
+
+    <style>
+        body {
+            font-family: Poppins, sans-serif;
+            background: #f4f5fc;
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4b4b4b;
+            margin-bottom: 20px;
+        }
+
+        .progress-box {
+            width: 90%;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .progress-bar {
+            width: 100%;
+            background: #ddd;
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .fill {
+            height: 100%;
+            background: #6a5af9;
+            width: {{ readiness }}%;
+        }
+
+        .card-container {
+            display: grid;
+            width: 90%;
+            margin: 20px auto;
+            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: #6a5af9;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        a {
+            color: #6a5af9;
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>🎯 Your Personalized Learning Path</h1>
+
+<!-- Readiness -->
+<div class="progress-box">
+    <h3>Job Readiness Score: <strong>{{ readiness }}%</strong></h3>
+
+    <div class="progress-bar">
+        <div class="fill"></div>
+    </div>
+</div>
+
+<div class="card-container">
+    
+    <!-- Weak Skills -->
+    <div class="card">
+        <h3>⚠ Weak Skills:</h3>
+        <ul>
+            {% for skill in weak %}
+                <h4>{{ skill }}</h4>
+            {% endfor %}
+        </ul>
+
+        <ul>
+            <li>Focus more on basics</li>
+            <li>Practice 5 problems daily</li>
+            <li>Follow recommended videos</li>
+        </ul>
+    </div>
+
+    <!-- Best Skills -->
+    <div class="card">
+        <h3>🌟 Best Skills:</h3>
+        <ul>
+
+            {% for skill in best %}
+                <h4>{{ skill }}</h4>
+            {% endfor %}
+        </ul>
+        <ul> <li>You are performing well in this skill</li>
+             <li>Try advanced level questions</li> 
+        </ul>
+    </div>
+
+    <!-- Steps To Improve -->
+    <div class="card">
+        <h3>📘 Steps to Improve</h3>
+
+        {% for skill in weak %}
+            <h4>{{ skill }}</h4>
+            <ul>
+                <li>Understand basic theory of {{ skill }}</li>
+                <li>Watch topic-wise videos</li>
+                <li>Practice quizzes daily</li>
+                <li>Track your improvement weekly</li>
+            </ul>
+        {% endfor %}
+    </div>
+
+    <!-- Video Recommendations -->
+    <div class="card">
+        <h3>▶ Recommended Videos</h3>
+
+        {% for skill in weak %}
+            <h4>{{ skill }}</h4>
+            <ul>
+                {% if skill == "APTITUDE" %}
+                    <li><a href="https://www.youtube.com/results?search_query=talent+battle+aptitude" target="_blank">Aptitude Full Course - Talent Battle </a></li>
+
+                {% elif skill == "DSA" %}
+                    <li><a href="https://youtube.com/playlist?list=PLgUwDviBIf0qUlt5H_kiKYaNSqJ81PMMY" target="_blank">DSA Full Course – Take U Forward</a></li>
+
+                {% elif skill == "DBMS" %}
+                    <li><a href="https://www.youtube.com/results?search_query=gate+smashers+dbms" target="_blank">DBMS Full Course – Gate Smashers</a></li>
+
+                {% elif skill == "OS" %}
+                    <li><a href="https://www.youtube.com/results?search_query=operating+system+tutorial" target="_blank">Operating System Tutorials – Neso Academy</a></li>
+                {% endif %}
+            </ul>
+        {% endfor %}
+    </div>
+
+    <!-- Practice Websites -->
+    <div class="card">
+        <h3>🌐 Practice Websites</h3>
+        <ul>
+            <li><a href="https://www.prepinsta.com" target="_blank">PrepInsta</a></li>
+            <li><a href="https://www.hackerrank.com" target="_blank">HackerRank</a></li>
+            <li><a href="https://leetcode.com" target="_blank">LeetCode</a></li>
+            <li><a href="https://www.geeksforgeeks.org" target="_blank">GeeksForGeeks</a></li>
+        </ul>
+    </div>
+
+    <!-- Weekly Study Plan -->
+    <div class="card">
+        <h3>📅 Weekly Study Plan</h3>
+        <ul>
+            {% for skill in weak %}
+                <li>Day {{ loop.index }} → Focus on basics of {{ skill }}</li>
+            {% endfor %}
+            <li>Day 6 → Revision</li>
+            <li>Day 7 → Test + Summary</li>
+        </ul>
+    </div>
+
+</div>
+
+</body>
+</html>

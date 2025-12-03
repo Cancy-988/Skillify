@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Analytics Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: Poppins, sans-serif;
+            background: #f3f4fb;
+            padding: 30px;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 28px;
+            color: #444;
+            margin-bottom: 25px;
+        }
+
+        .chart-box {
+            width: 80%;
+            margin: 25px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>📊 Analytics Dashboard</h2>
+
+{% if no_data %}
+    <h3 style="text-align:center; color:#888;">No quiz data available yet.</h3>
+{% else %}
+
+<!-- Bar Chart -->
+<div class="chart-box">
+    <h3 style="text-align:center;">Category Performance</h3>
+    <canvas id="barChart"></canvas>
+</div>
+
+<!-- Horizontal Bar -->
+<div class="chart-box">
+    <h3 style="text-align:center;">Strength Ranking</h3>
+    <canvas id="horizontalChart"></canvas>
+</div>
+
+<!-- Line Chart -->
+<div class="chart-box">
+    <h3 style="text-align:center;">Performance Over Time</h3>
+    <canvas id="lineChart"></canvas>
+</div>
+
+<!-- Pie Chart -->
+<div class="chart-box">
+    <h3 style="text-align:center;">Skill Distribution</h3>
+    <canvas id="pieChart"></canvas>
+</div>
+
+{% endif %}
+
+<script>
+    const categories = {{ categories | tojson }};
+    const scores = {{ scores | tojson }};
+    const totals = {{ totals | tojson }};
+    const dates = {{ dates | tojson }};
+    const history = {{ history | tojson }};
+
+    // BAR CHART
+    new Chart(document.getElementById('barChart'), {
+        type: 'bar',
+        data: {
+            labels: categories,
+            datasets: [{
+                label: "Score",
+                data: scores,
+                backgroundColor: "#6a5af9"
+            }]
+        },
+        options: { scales: { y: { beginAtZero: true } } }
+    });
+
+    // HORIZONTAL BAR CHART
+    new Chart(document.getElementById('horizontalChart'), {
+        type: 'bar',
+        data: {
+            labels: categories,
+            datasets: [{
+                label: "Score",
+                data: scores,
+                backgroundColor: "#4bc0c0"
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            scales: { x: { beginAtZero: true } }
+        }
+    });
+
+    // LINE CHART (PERFORMANCE OVER TIME)
+    const lineDatasets = [];
+    for (let cat in history) {
+        lineDatasets.push({
+            label: cat.toUpperCase(),
+            data: history[cat],
+            borderWidth: 2,
+            fill: false
+        });
+    }
+
+    new Chart(document.getElementById('lineChart'), {
+        type: 'line',
+        data: {
+            labels: dates,
+            datasets: lineDatasets
+        }
+    });
+
+    // PIE CHART
+    new Chart(document.getElementById('pieChart'), {
+        type: 'pie',
+        data: {
+            labels: categories,
+            datasets: [{
+                data: scores,
+                backgroundColor: ["#6a5af9", "#ff6384", "#36a2eb", "#ffcd56"]
+            }]
+        }
+    });
+
+</script>
+
+</body>
+</html>

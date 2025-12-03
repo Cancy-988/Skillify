@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Results</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: Poppins, sans-serif;
+            background: #f5f5f8;
+            padding: 30px;
+            margin: 0;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .page-wrapper {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* 🔹 Job Readiness Card */
+        .readiness-card {
+            background: linear-gradient(135deg, #6a5af9, #8f7bff);
+            color: white;
+            border-radius: 18px;
+            padding: 20px 25px;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .readiness-main {
+            max-width: 65%;
+        }
+
+        .readiness-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .readiness-status {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600;
+            background: rgba(255,255,255,0.18);
+        }
+
+        .readiness-percent {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .readiness-sub {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        /* 🔹 Summary cards */
+        .summary-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 14px 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+
+        .summary-label {
+            font-size: 13px;
+            color: #777;
+        }
+
+        .summary-value {
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 3px;
+        }
+
+        /* 🔹 Chart box */
+        .chart-box {
+            width: 100%;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        /* 🔹 Table styles */
+        table {
+            width: 100%;
+            margin: 25px auto;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        th {
+            background: #6a5af9;
+            color: white;
+        }
+
+        tr:hover {
+            background: #f5f3ff;
+        }
+
+        /* 🔹 Insight box */
+        .insight-box {
+            margin-top: 25px;
+            background: #ffffff;
+            padding: 18px 20px;
+            border-left: 5px solid #6a5af9;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .insight-title {
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #333;
+        }
+
+        .insight-text {
+            color: #555;
+            white-space: pre-line; /* so \n shows as new line */
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+    <h2>Your Skill & Job Readiness Analytics</h2>
+
+    <!-- 🔹 JOB READINESS CARD -->
+    <div class="readiness-card">
+        <div class="readiness-main">
+            <div class="readiness-title">Job Readiness Prediction (AI)</div>
+
+            {% if job_pred is none %}
+                <div class="readiness-status">
+                    🤖 Not enough data yet. Please attempt more quizzes in different sections.
+                </div>
+                <span class="badge">Status: Pending</span>
+            {% elif job_pred == 1 %}
+                <div class="readiness-status">
+                    ✅ Great! Our model predicts you are <b>Job Ready</b> for entry-level roles. 🎉
+                </div>
+                <span class="badge">Status: Job Ready</span>
+            {% else %}
+                <div class="readiness-status">
+                    🧩 You are <b>Still in Preparation Phase</b>. Focus on weak areas and keep practicing. 💪
+                </div>
+                <span class="badge">Status: Keep Improving</span>
+            {% endif %}
+        </div>
+
+        <div class="readiness-right">
+            <div class="readiness-percent">
+                {{ overall_percent }}%
+            </div>
+            <div class="readiness-sub">
+                Overall quiz performance
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔹 SUMMARY CARDS -->
+    <div class="summary-row">
+        <div class="summary-card">
+            <div class="summary-label">Total Quizzes Taken</div>
+            <div class="summary-value">
+                {{ results|length }}
+            </div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-label">Average Score (%)</div>
+            <div class="summary-value">
+                {% if totals and totals|sum > 0 %}
+                    {{ ((scores|sum / totals|sum) * 100) | round(1) }}%
+                {% else %}
+                    0%
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-label">Best Skill Area</div>
+            <div class="summary-value">
+                {% if categories %}
+                    {{ categories[0].upper() }}
+                {% else %}
+                    -
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-label">Latest Attempt</div>
+            <div class="summary-value">
+                {% if results %}
+                    {{ results[0][3] }}
+                {% else %}
+                    -
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔹 BAR CHART -->
+    <div class="chart-box">
+        <canvas id="scoreChart"></canvas>
+    </div>
+
+    <!-- 🔹 RESULT TABLE -->
+    <table>
+        <tr>
+            <th>Category</th>
+            <th>Score</th>
+            <th>Total</th>
+            <th>Date</th>
+        </tr>
+
+        {% for r in results %}
+        <tr>
+            <td>{{ r[0].upper() }}</td>
+            <td>{{ r[1] }}</td>
+            <td>{{ r[2] }}</td>
+            <td>{{ r[3] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- 🔹 INSIGHTS BOX -->
+    <div class="insight-box">
+        <div class="insight-title">📌 Insights & Recommendations</div>
+        <div class="insight-text">
+            {{ insight }}
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const ctx = document.getElementById('scoreChart').getContext('2d');
+
+    const categories = {{ categories | tojson }};
+    const scores = {{ scores | tojson }};
+    const totals = {{ totals | tojson }};
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: categories.map(c => c.toUpperCase()),
+            datasets: [
+                {
+                    label: "Your Score",
+                    data: scores,
+                    backgroundColor: "rgba(106, 90, 249, 0.8)"
+                },
+                {
+                    label: "Total Marks",
+                    data: totals,
+                    backgroundColor: "rgba(180, 180, 255, 0.7)"
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

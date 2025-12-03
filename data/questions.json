@@ -1,0 +1,113 @@
+{
+    "aptitude": [
+        {
+            "question": "What is the next number in the series: 2, 6, 12, 20, ?",
+            "options": ["28", "30", "32", "34"],
+            "answer": "30"
+        },
+        {
+            "question": "Average of 5 numbers is 24. What is their sum?",
+            "options": ["100", "110", "120", "95"],
+            "answer": "120"
+        },
+        {
+            "question": "If A = 60% of B, then B is what percent of A?",
+            "options": ["60%", "100%", "120%", "166.6%"],
+            "answer": "166.6%"
+        },
+        {
+            "question": "A train covers 120 km in 3 hours. Speed?",
+            "options": ["30 km/hr", "40 km/hr", "50 km/hr", "60 km/hr"],
+            "answer": "40 km/hr"
+        },
+        {
+            "question": "What is the opposite of 'Increase'?",
+            "options": ["Reduce", "Enhance", "Expand", "Grow"],
+            "answer": "Reduce"
+        }
+    ],
+
+    "dsa": [
+        {
+            "question": "What is the time complexity of binary search?",
+            "options": ["O(n)", "O(log n)", "O(n log n)", "O(1)"],
+            "answer": "O(log n)"
+        },
+        {
+            "question": "Which data structure uses FIFO?",
+            "options": ["Stack", "Queue", "Tree", "Graph"],
+            "answer": "Queue"
+        },
+        {
+            "question": "Which traversal gives sorted order in BST?",
+            "options": ["Inorder", "Preorder", "Postorder", "Level order"],
+            "answer": "Inorder"
+        },
+        {
+            "question": "What is the space complexity of merge sort?",
+            "options": ["O(1)", "O(n)", "O(log n)", "O(n^2)"],
+            "answer": "O(n)"
+        },
+        {
+            "question": "Which structure is used in recursion?",
+            "options": ["Queue", "Stack", "Array", "Graph"],
+            "answer": "Stack"
+        }
+    ],
+
+    "dbms": [
+        {
+            "question": "Which SQL statement is used to extract data?",
+            "options": ["GET", "EXTRACT", "SELECT", "READ"],
+            "answer": "SELECT"
+        },
+        {
+            "question": "What is a primary key?",
+            "options": ["Duplicate key", "Unique identifier", "Foreign key", "Temporary key"],
+            "answer": "Unique identifier"
+        },
+        {
+            "question": "Which normal form removes partial dependency?",
+            "options": ["1NF", "2NF", "3NF", "BCNF"],
+            "answer": "2NF"
+        },
+        {
+            "question": "Which command removes a table?",
+            "options": ["DELETE", "DROP", "REMOVE", "CLEAR"],
+            "answer": "DROP"
+        },
+        {
+            "question": "What is ACID in DBMS?",
+            "options": ["Transaction properties", "Query language", "Security model", "Backup process"],
+            "answer": "Transaction properties"
+        }
+    ],
+
+    "os": [
+        {
+            "question": "Which scheduling algorithm is non-preemptive?",
+            "options": ["SJF", "Round Robin", "Priority", "Multilevel Queue"],
+            "answer": "SJF"
+        },
+        {
+            "question": "Thrashing is related to?",
+            "options": ["CPU", "Memory", "Cache", "Disk"],
+            "answer": "Memory"
+        },
+        {
+            "question": "Which is NOT an OS?",
+            "options": ["Windows", "Linux", "MacOS", "Oracle"],
+            "answer": "Oracle"
+        },
+        {
+            "question": "What is a deadlock?",
+            "options": ["High CPU usage", "Processes waiting forever", "Task scheduling", "Memory leak"],
+            "answer": "Processes waiting forever"
+        },
+        {
+            "question": "Which OS uses time-sharing?",
+            "options": ["Batch OS", "Real-time OS", "Interactive OS", "Distributed OS"],
+            "answer": "Interactive OS"
+        }
+    ]
+}

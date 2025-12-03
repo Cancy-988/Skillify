@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Profile</title>
+    <style>
+        body { font-family: Poppins; background:#f5f6fa; padding:40px; }
+        .form-box {
+            width: 60%; margin:auto;
+            background:white; padding:30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        input, textarea {
+            width:100%; padding:10px;
+            margin:10px 0; border-radius:8px;
+            border:1px solid #ccc;
+            font-size:16px;
+        }
+        button {
+            padding: 10px 20px;
+            background:#6a5af9; color:white;
+            border:none; border-radius:8px;
+            font-size:16px; cursor:pointer;
+        }
+        button:hover { background:#5847e0; }
+    </style>
+</head>
+<body>
+
+<div class="form-box">
+    <h2>Edit Profile</h2>
+
+    <form action="/update_profile" method="POST" enctype="multipart/form-data">
+        
+        <label>Name</label>
+        <input type="text" name="name" value="{{ user[0] }}" required>
+
+        <label>Branch</label>
+        <input type="text" name="branch" value="{{ details[0] }}" required>
+
+        <label>Skills</label>
+        <textarea name="skills" required>{{ details[3] }}</textarea>
+
+        <label>Upload Profile Picture</label>
+        <input type="file" name="profile_pic">
+
+        <button type="submit">Save Changes</button>
+    </form>
+
+    <br>
+    <a href="/profile">⬅ Back</a>
+
+</div>
+
+</body>
+</html>
