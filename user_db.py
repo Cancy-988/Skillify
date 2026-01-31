@@ -10,8 +10,6 @@ cursor = connection.cursor()
 cursor.execute("ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'student'")
 connection.commit()
 
-cursor.execute("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)", 
-               ("Admin", "admin@gmail.com", "admin123", "admin"))
 
 connection.commit()
 connection.close()

@@ -2,8 +2,6 @@
 
 Skillify is a data-driven student skill assessment and analytics platform designed to help students evaluate their technical and aptitude skills, monitor progress, receive personalized learning guidance, and predict career readiness using Machine Learning.
 
-This project is developed as a Final Year B.Tech CSE (Data Science) project, focusing on real-world application, usability, and analytics-driven decision-making for students and academic institutions.
-
 📌 Problem Statement
 
 Many students are unsure about:
@@ -45,17 +43,6 @@ Quiz result summary with category-wise analysis
 
 🤖 Job readiness prediction using Machine Learning
 
-🛠 Admin Module
-
-Role-based admin authentication
-
-Admin dashboard with platform overview
-
-View total students, quizzes attempted, and performance trends
-
-Branch-wise and category-wise analytics
-
-Helps institutions identify skill gaps across students
 
 📊 Analytics & Visualization
 
@@ -154,7 +141,7 @@ ML model predicts job readiness
 
 Learning path is generated based on weak skills
 
-Admin can monitor overall performance and trends
+
 
 🎯 Outcome
 
@@ -192,4 +179,4 @@ This project was developed as part of the B.Tech Final Year Curriculum to demons
 
 ⭐ Conclusion
 
-Skillify is a practical, analytics-driven, and scalable platform that bridges the gap between student performance data and career readiness, making it useful for students, educators, and institutions.
+Skillify is a practical, analytics-driven, and scalable platform that bridges the gap between student performance data and career readiness, making it useful for students.
