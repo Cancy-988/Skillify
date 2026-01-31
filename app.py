@@ -338,7 +338,7 @@ def submit_quiz(category):
     session["quiz_score"] = score
     session["quiz_category"] = category
 
-    return redirect("/results")
+    return redirect("/submit_quiz/" + category)
 
 
 def generate_insight(scores, categories):
@@ -413,19 +413,18 @@ def results():
     records = cursor.fetchall()
     conn.close()
 
-    categories = [row[0] for row in records]
-    scores = [row[1] for row in records]
-    totals = [row[2] for row in records]
+    categories = [r[0].upper() for r in records]
+    scores = [r[1] for r in records]
+    totals = [r[2] for r in records]
 
-    
+    # overall percentage
     if totals and sum(totals) > 0:
-        overall_percent = round(sum(scores) / sum(totals) * 100)
+        overall_percent = round((sum(scores) / sum(totals)) * 100)
     else:
         overall_percent = 0
 
     insight_text = generate_insight(scores, categories)
-
-    job_pred = session.get("job_ready_prediction")  # 0 = not ready, 1 = ready
+    job_pred = session.get("job_ready_prediction")
 
     return render_template(
         "results.html",
@@ -437,7 +436,6 @@ def results():
         overall_percent=overall_percent,
         job_pred=job_pred
     )
-
 
 
 @app.route("/learning_path")
