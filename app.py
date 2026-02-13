@@ -439,50 +439,63 @@ def learning_path():
     if "user_email" not in session:
         return redirect("/login")
 
-    email = session["user_email"]
-
     conn = sqlite3.connect("data/users.db")
     cursor = conn.cursor()
 
     cursor.execute("""
-        SELECT category, score, total 
-        FROM quiz_results 
-        WHERE user_email=? 
+        SELECT category, score, total
+        FROM quiz_results
+        WHERE user_email=?
         ORDER BY taken_on DESC
-    """, (email,))
-    
+    """, (session["user_email"],))
+
     records = cursor.fetchall()
     conn.close()
 
+    # 🔹 Case 1: NEW USER (no quiz taken)
     if not records:
-        return render_template("learning_path.html", 
-                               message="Please attempt at least one quiz to get your learning path.")
+        return render_template(
+            "learning_path.html",
+            message="Please attempt at least one quiz to generate your learning path.",
+            readiness=0,
+            weak=[],
+            best=[],
+            score_map={}
+        )
 
+    # 🔹 Case 2: Quiz data exists - Deduplicate by taking latest score per category
+    category_data = {}
+    for cat, score, total in records:
+        cat_upper = cat.upper()
+        if cat_upper not in category_data:
+            category_data[cat_upper] = {"score": score, "total": total}
 
-    categories = [r[0].upper() for r in records]
-    scores = [r[1] for r in records]
-    totals = [r[2] for r in records]
-    score_map = {r[0].upper(): r[1] for r in records}
+    # Extract unique categories, scores, totals
+    categories = list(category_data.keys())
+    scores = [category_data[cat]["score"] for cat in categories]
+    totals = [category_data[cat]["total"] for cat in categories]
 
+    readiness = round((sum(scores) / sum(totals)) * 100, 1) if sum(totals) > 0 else 0
 
+    # Find weak and strong skills (unique)
     min_score = min(scores)
-
-   
-    weak_skills = [categories[i].upper() for i, s in enumerate(scores) if s == min_score]
-
     max_score = max(scores)
-    best_skills = [categories[i].upper() for i, s in enumerate(scores) if s == max_score]
 
-    readiness = round((sum(scores) / sum(totals)) * 100, 1)
+    weak = list(set([categories[i] for i, s in enumerate(scores) if s == min_score]))
+    best = list(set([categories[i] for i, s in enumerate(scores) if s == max_score]))
 
+    score_map = {cat: category_data[cat]["score"] for cat in categories}
 
     return render_template(
         "learning_path.html",
-        best=best_skills,
-        weak=weak_skills,
         readiness=readiness,
-        score_map=score_map
+        weak=weak,
+        best=best,
+        score_map=score_map,
+        message=None
     )
+
+
 
 
 from collections import defaultdict

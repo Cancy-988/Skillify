@@ -50,6 +50,10 @@
             transition: var(--transition);
             min-height: 100vh;
         }
+        body.dark-theme {
+            background-color: #1a1a2e;   
+            color: #f8f9fa;              
+        }
 
         /* Top Navigation Bar */
         .navbar {
@@ -534,6 +538,16 @@
                         <p class="card-desc">Fill in your academic details, skills, and experience to get personalized recommendations.</p>
                     </div>
                 </div>
+                {% if details %}
+                <div style="margin: 15px 0; padding: 15px; background: var(--gray-light); border-radius: 8px; font-size: 0.9rem;">
+                    <p style="margin-bottom: 8px;"><strong>Branch:</strong> {{ details[0] }}</p>
+                    <p style="margin-bottom: 8px;"><strong>Projects:</strong> {{ details[1] }}</p>
+                    <p style="margin-bottom: 8px;"><strong>Internships:</strong> {{ details[2] }}</p>
+                    <p><strong>Confidence:</strong> {{ details[3] }}/10</p>
+                </div>
+                {% else %}
+                <p style="margin: 15px 0; color: var(--gray); font-size: 0.9rem;">No profile data found. Please fill your details.</p>
+                {% endif %}
                 <a href="/form" class="card-action">Fill Details →</a>
             </div>
 
@@ -697,14 +711,6 @@
             const name = "{{ name }}";
             welcomeTitle.innerHTML = `${greeting}, ${name}! 👋 <span style="font-size: 2rem; opacity: 0.8;">🚀</span>`;
         });
-        {% if details %}
-<p><b>Branch:</b> {{ details[0] }}</p>
-<p><b>Projects:</b> {{ details[1] }}</p>
-<p><b>Internships:</b> {{ details[2] }}</p>
-<p><b>Confidence:</b> {{ details[3] }}/10</p>
-{% else %}
-<p>No profile data found</p>
-{% endif %}
     </script>
 </body>
 </html>

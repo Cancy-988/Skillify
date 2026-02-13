@@ -42,15 +42,25 @@
             font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
+        /* Hide scrollbar but allow scrolling */
+        html, body {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        html::-webkit-scrollbar, body::-webkit-scrollbar {
+            display: none;
+        }
+
         body {
-            background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(114, 9, 183, 0.05));
+            background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 50%, #f5f0ff 100%);
             min-height: 100vh;
             padding: 20px;
             transition: var(--transition);
+            overflow-x: hidden;
         }
 
-        .dark-theme body {
-            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(114, 9, 183, 0.1));
+        body.dark-theme {
+            background: linear-gradient(135deg, #0d0d0d 0%, #1a1a2e 50%, #16213e 100%);
         }
 
         /* Header - Same as Dashboard */
@@ -67,8 +77,9 @@
         }
 
         .dark-theme .navbar {
-            background: var(--gray-light);
+            background: #0f0f1a;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         .logo-container {
@@ -121,6 +132,12 @@
             color: var(--dark);
         }
 
+        .dark-theme .theme-toggle {
+            background: #252540;
+            color: #f0f0f0;
+            border: 1px solid #3d3d5c;
+        }
+
         .theme-toggle:hover {
             background: var(--primary);
             color: white;
@@ -166,6 +183,14 @@
             font-size: 1.1rem;
             max-width: 600px;
             margin: 0 auto;
+        }
+
+        .dark-theme .page-subtitle {
+            color: #b8b8c8;
+        }
+
+        .dark-theme .card-title {
+            color: #f0f0f0;
         }
 
         /* Progress Card */
@@ -278,7 +303,8 @@
         }
 
         .dark-theme .skill-card {
-            background: var(--gray-light);
+            background: #1a1a2e;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .skill-card:hover {
@@ -343,7 +369,16 @@
         }
 
         .dark-theme .skill-item {
-            background: rgba(255, 255, 255, 0.05);
+            background: #252540;
+            border: 1px solid #3d3d5c;
+        }
+
+        .dark-theme .skill-name {
+            color: #f0f0f0;
+        }
+
+        .dark-theme .skill-score {
+            color: #b8b8c8;
         }
 
         .skill-item:hover {
@@ -379,7 +414,12 @@
         }
 
         .dark-theme .content-card {
-            background: var(--gray-light);
+            background: #1a1a2e;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .dark-theme .content-title {
+            color: #f0f0f0;
         }
 
         .content-card:hover {
@@ -428,8 +468,12 @@
         }
 
         .dark-theme .video-item {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.1);
+            background: #252540;
+            border-color: #3d3d5c;
+        }
+
+        .dark-theme .video-link {
+            color: #f0f0f0;
         }
 
         .video-item:hover {
@@ -479,7 +523,15 @@
         }
 
         .dark-theme .step-item {
-            background: rgba(255, 255, 255, 0.05);
+            background: #252540;
+        }
+
+        .dark-theme .step-title {
+            color: #f0f0f0;
+        }
+
+        .dark-theme .step-desc {
+            color: #b8b8c8;
         }
 
         .step-item:hover {
@@ -535,8 +587,12 @@
         }
 
         .dark-theme .website-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.1);
+            background: #252540;
+            border-color: #3d3d5c;
+        }
+
+        .dark-theme .website-name {
+            color: #f0f0f0;
         }
 
         .website-card:hover {
@@ -592,7 +648,15 @@
         }
 
         .dark-theme .day-card {
-            background: rgba(255, 255, 255, 0.05);
+            background: #252540;
+        }
+
+        .dark-theme .day-content h4 {
+            color: #f0f0f0;
+        }
+
+        .dark-theme .day-content p {
+            color: #b8b8c8;
         }
 
         .day-card:hover {
@@ -659,6 +723,12 @@
         .btn-secondary {
             background: var(--gray-light);
             color: var(--dark);
+        }
+
+        .dark-theme .btn-secondary {
+            background: #252540;
+            color: #e0e0e0;
+            border: 1px solid #3d3d5c;
         }
 
         .btn-secondary:hover {
@@ -1050,4 +1120,61 @@
 
     <script>
         // Theme Toggle
-        const themeToggle = document.getElementById('
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        // Detect system preference
+        function detectSystemTheme() {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                return 'dark';
+            }
+            return 'light';
+        }
+        
+        // Apply theme
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                body.classList.add('dark-theme');
+                themeToggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-theme');
+                themeToggle.textContent = '🌙';
+            }
+        }
+        
+        // Initialize theme
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('skillify-theme');
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else {
+                const systemTheme = detectSystemTheme();
+                applyTheme(systemTheme);
+                localStorage.setItem('skillify-theme', systemTheme);
+            }
+            
+            // Animate progress bar
+            const progressFill = document.getElementById('progressFill');
+            if (progressFill) {
+                const readiness = {{ readiness if readiness else 0 }};
+                setTimeout(() => {
+                    progressFill.style.width = readiness + '%';
+                }, 500);
+            }
+        });
+        
+        // Toggle theme
+        themeToggle.addEventListener('click', function() {
+            const isDark = body.classList.contains('dark-theme');
+            const newTheme = isDark ? 'light' : 'dark';
+            applyTheme(newTheme);
+            localStorage.setItem('skillify-theme', newTheme);
+            
+            this.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 300);
+        });
+    </script>
+</body>
+</html>
