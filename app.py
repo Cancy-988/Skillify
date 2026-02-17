@@ -291,8 +291,11 @@ def quiz_sections():
 
 
 from datetime import datetime
-@app.route("/submit_quiz/<category>", methods=["POST"])
+@app.route("/submit_quiz/<category>", methods=["GET", "POST"])
 def submit_quiz(category):
+    if request.method == "GET":
+        return redirect(f"/quiz/{category}")
+    
     questions = load_questions()[category]
     score = 0
 
@@ -357,7 +360,7 @@ def submit_quiz(category):
     session["quiz_score"] = score
     session["quiz_category"] = category
 
-    return redirect("/submit_quiz/" + category)
+    return redirect("/results")
 
 
 def generate_insight(scores, categories):
