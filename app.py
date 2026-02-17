@@ -12,6 +12,13 @@ app.config["UPLOAD_FOLDER"] = "static/uploads"
 
 model = pickle.load(open("job_ready_model.pkl", "rb"))
 
+def get_db_connection(db_path="data/users.db"):
+    """Get database connection with timeout and WAL mode to prevent locking issues"""
+    conn = sqlite3.connect(db_path, timeout=30)
+    conn.execute("PRAGMA journal_mode=WAL")
+    conn.execute("PRAGMA busy_timeout=30000")
+    return conn
+
 def load_questions():
     with open("data/questions.json", "r") as file:
         questions = json.load(file)
@@ -44,7 +51,7 @@ def login():
        
 
 
-        conn = sqlite3.connect("data/users.db")
+        conn = get_db_connection()
         cursor = conn.cursor()
 
         cursor.execute("SELECT name, password FROM users WHERE email=?", (email,))
@@ -78,7 +85,7 @@ def signup():
         email = request.form["email"]
         password = request.form["password"]
 
-        conn = sqlite3.connect("data/users.db")
+        conn = get_db_connection()
         cursor = conn.cursor()
 
         cursor.execute("SELECT * FROM users WHERE email=?", (email,))
@@ -121,7 +128,7 @@ def student():
 
         email = session.get("user_email")
 
-        conn = sqlite3.connect("data/users.db")
+        conn = get_db_connection()
         cursor = conn.cursor()
 
         cursor.execute("INSERT INTO student_details (user_email, branch, projects, internships, skills, confidence) VALUES (?, ?, ?, ?, ?, ?)",
@@ -169,17 +176,19 @@ def profile():
         return redirect("/login")
 
     email = session["user_email"]
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
 
-    conn = sqlite3.connect("data/users.db")
-    cursor = conn.cursor()
+        cursor.execute("SELECT name, email, profile_pic FROM users WHERE email=?", (email,))
+        user = cursor.fetchone()
 
-    cursor.execute("SELECT name, email, profile_pic FROM users WHERE email=?", (email,))
-    user = cursor.fetchone()
-
-    cursor.execute("SELECT branch, projects, internships, skills, confidence FROM student_details WHERE user_email=?", (email,))
-    details = cursor.fetchone()
-
-    conn.close()
+        cursor.execute("SELECT branch, projects, internships, skills, confidence FROM student_details WHERE user_email=?", (email,))
+        details = cursor.fetchone()
+    finally:
+        if conn:
+            conn.close()
 
     return render_template("profile.html", user=user, details=details)
 
@@ -190,16 +199,19 @@ def edit_profile():
         return redirect("/login")
 
     email = session["user_email"]
-    conn = sqlite3.connect("data/users.db")
-    cursor = conn.cursor()
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
 
-    cursor.execute("SELECT name, email, profile_pic FROM users WHERE email=?", (email,))
-    user = cursor.fetchone()
+        cursor.execute("SELECT name, email, profile_pic FROM users WHERE email=?", (email,))
+        user = cursor.fetchone()
 
-    cursor.execute("SELECT branch, projects, internships, skills, confidence FROM student_details WHERE user_email=?", (email,))
-    details = cursor.fetchone()
-
-    conn.close()
+        cursor.execute("SELECT branch, projects, internships, skills, confidence FROM student_details WHERE user_email=?", (email,))
+        details = cursor.fetchone()
+    finally:
+        if conn:
+            conn.close()
 
     return render_template("edit_profile.html", user=user, details=details)
 
@@ -212,6 +224,9 @@ def update_profile():
     name = request.form["name"]
     branch = request.form["branch"]
     skills = request.form["skills"]
+    projects = request.form["projects"]
+    internships = request.form["internships"]
+    confidence = request.form["confidence"]
 
     file = request.files.get("profile_pic")
     filename = None
@@ -222,18 +237,22 @@ def update_profile():
         save_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
         file.save(save_path)
 
-    conn = sqlite3.connect("data/users.db")
-    cursor = conn.cursor()
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
 
-    if filename:
-        cursor.execute("UPDATE users SET name=?, profile_pic=? WHERE email=?", (name, filename, email))
-    else:
-        cursor.execute("UPDATE users SET name=? WHERE email=?", (name, email))
+        if filename:
+            cursor.execute("UPDATE users SET name=?, profile_pic=? WHERE email=?", (name, filename, email))
+        else:
+            cursor.execute("UPDATE users SET name=? WHERE email=?", (name, email))
 
-    cursor.execute("UPDATE student_details SET branch=?, skills=? WHERE user_email=?", (branch, skills, email))
+        cursor.execute("UPDATE student_details SET branch=?, skills=?, projects=?, internships=?, confidence=? WHERE user_email=?", (branch, skills, projects, internships, confidence, email))
 
-    conn.commit()
-    conn.close()
+        conn.commit()
+    finally:
+        if conn:
+            conn.close()
 
     session["user_name"] = name
 
@@ -246,7 +265,7 @@ def quiz_sections():
 
     email = session["user_email"]
 
-    conn = sqlite3.connect("data/users.db")
+    conn = get_db_connection()
     cursor = conn.cursor()
 
     cursor.execute(
@@ -286,7 +305,7 @@ def submit_quiz(category):
     total = len(questions)
 
    
-    conn = sqlite3.connect("data/users.db")
+    conn = get_db_connection()
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -305,7 +324,7 @@ def submit_quiz(category):
 
     
 
-    conn = sqlite3.connect("data/users.db")
+    conn = get_db_connection()
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -396,7 +415,7 @@ def results():
 
     email = session["user_email"]
 
-    conn = sqlite3.connect("data/users.db")
+    conn = get_db_connection()
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -439,7 +458,7 @@ def learning_path():
     if "user_email" not in session:
         return redirect("/login")
 
-    conn = sqlite3.connect("data/users.db")
+    conn = get_db_connection()
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -506,7 +525,7 @@ def analytics():
         return redirect("/login")
 
     email = session["user_email"]
-    conn = sqlite3.connect("data/users.db")
+    conn = get_db_connection()
     cursor = conn.cursor()
 
     cursor.execute("""

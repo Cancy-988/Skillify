@@ -4,7 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Skillify - Student Details</title>
+    
+    <!-- Theme Preload to prevent flash -->
+    <script>
+        (function() {
+            try {
+                const savedTheme = localStorage.getItem('skillify-theme');
+                if (savedTheme === 'dark') {
+                    document.documentElement.classList.add('dark-theme');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    
     <style>
+        /* Light Theme Variables */
         :root {
             --primary: #4361ee;
             --primary-dark: #3a56d4;
@@ -21,8 +35,8 @@
             --radius: 16px;
         }
 
-        /* Dark Theme Variables - FIXED COLORS */
-        .dark-theme {
+        /* Dark Theme Variables */
+        html.dark-theme {
             --primary: #5d7df5;
             --primary-dark: #4a67e3;
             --secondary: #8a2be2;
@@ -43,44 +57,17 @@
             font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* Hide scrollbar but allow scrolling */
-        html, body {
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none; /* IE/Edge */
-        }
-        html::-webkit-scrollbar, body::-webkit-scrollbar {
-            display: none; /* Chrome, Safari, Opera */
-        }
-
         body {
-            background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 50%, #f5f0ff 100%);
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(114, 9, 183, 0.05));
             min-height: 100vh;
-            transition: var(--transition);
-            overflow-x: hidden;
+            transition: background-color 0.3s ease;
         }
 
-        .dark-theme body,
-        body.dark-theme {
-            background: linear-gradient(135deg, #0d0d0d 0%, #1a1a2e 50%, #16213e 100%);
+        html.dark-theme body {
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(114, 9, 183, 0.1));
         }
 
-        /* Smooth transitions for theme switching */
-        body,
-        .navbar,
-        .form-container,
-        .form-input,
-        .form-textarea,
-        .form-select,
-        .btn,
-        .branch-label,
-        .skill-tag {
-            transition: background-color 0.3s ease, 
-                        color 0.3s ease, 
-                        border-color 0.3s ease,
-                        box-shadow 0.3s ease;
-        }
-
-        /* FIXED HEADER - Always at top */
+        /* Navbar - Fixed at top */
         .navbar {
             background: white;
             padding: 15px 40px;
@@ -96,45 +83,18 @@
             transition: var(--transition);
         }
 
-        .dark-theme .navbar {
-            background: #0f0f1a;
+        html.dark-theme .navbar {
+            background: #1e1e1e;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-        }
-
-        .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 20px;
-        }
-
-        .logo-text {
+        .logo {
             font-size: 24px;
             font-weight: 700;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 20px;
         }
 
         .theme-toggle {
@@ -152,10 +112,9 @@
             color: var(--dark);
         }
 
-        .dark-theme .theme-toggle {
-            background: #252540;
-            color: #f0f0f0;
-            border: 1px solid #3d3d5c;
+        html.dark-theme .theme-toggle {
+            background: #333;
+            color: #ffffff;
         }
 
         .theme-toggle:hover {
@@ -164,31 +123,27 @@
             transform: rotate(15deg);
         }
 
-        /* Main content with proper spacing for fixed header */
-        .main-content {
-            width: 100%;
+        /* Main Container */
+        .container {
+
+            width: 85%;
             max-width: 1400px;
-            margin: 90px auto 30px;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: center;
+            margin: 100px auto 40px;
+            padding: 0 20px;
         }
 
-        /* Form Container */
-        .form-container {
+        /* Form Card */
+        .form-card {
             background: white;
             border-radius: var(--radius);
             box-shadow: var(--shadow-lg);
-            width: 100%;
-            max-width: 1000px;
             overflow: hidden;
             animation: slideUp 0.6s ease-out;
         }
 
-        .dark-theme .form-container {
-            background: #1a1a2e;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        html.dark-theme .form-card {
+            background: #1e1e1e;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         @keyframes slideUp {
@@ -223,7 +178,7 @@
             opacity: 0.3;
         }
 
-        .form-title {
+        .form-header h2 {
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 10px;
@@ -231,7 +186,7 @@
             z-index: 2;
         }
 
-        .form-subtitle {
+        .form-header p {
             font-size: 1.1rem;
             opacity: 0.9;
             max-width: 600px;
@@ -242,45 +197,34 @@
 
         /* Form Content */
         .form-content {
-            padding: 40px 50px;
+            padding: 40px;
         }
 
-        /* Form Grid */
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-bottom: 30px;
-        }
-
-        /* Form Groups */
         .form-group {
             margin-bottom: 25px;
         }
 
-        .form-label {
+        label {
             display: block;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             font-weight: 600;
             color: var(--dark);
             font-size: 1rem;
             display: flex;
             align-items: center;
             gap: 8px;
-            letter-spacing: 0.3px;
         }
 
-        .dark-theme .form-label {
-            color: #f0f0f0;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        html.dark-theme label {
+            color: #ffffff;
         }
 
-        .form-label .required {
+        .required {
             color: var(--accent);
-            font-size: 0.8rem;
+            font-size: 0.9rem;
         }
 
-        .form-input, .form-textarea, .form-select {
+        input, select {
             width: 100%;
             padding: 14px 18px;
             background: var(--light);
@@ -289,137 +233,43 @@
             font-size: 1rem;
             color: var(--dark);
             transition: var(--transition);
-        }
-
-        .dark-theme .form-input,
-        .dark-theme .form-textarea,
-        .dark-theme .form-select {
-            background: #252540;
-            border-color: #3d3d5c;
-            color: #ffffff;
-        }
-
-        .dark-theme .form-input::placeholder,
-        .dark-theme .form-textarea::placeholder,
-        .dark-theme .form-select::placeholder {
-            color: #888;
-        }
-
-        .form-input:focus, .form-textarea:focus, .form-select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .dark-theme .form-input:focus,
-        .dark-theme .form-textarea:focus,
-        .dark-theme .form-select:focus {
-            background: #2a2a4a;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(93, 125, 245, 0.25);
-        }
-
-        /* Success state for valid fields */
-        .form-input:valid,
-        .form-select:valid {
-            border-color: var(--success);
-        }
-
-        .dark-theme .form-input:valid,
-        .dark-theme .form-select:valid {
-            border-color: #4cc9f0;
-        }
-
-        .form-textarea {
-            min-height: 120px;
-            resize: vertical;
             font-family: inherit;
         }
 
-        /* Error message styling */
-        .error-message {
-            color: var(--accent);
-            font-size: 0.85rem;
-            margin-top: 5px;
+        html.dark-theme input,
+        html.dark-theme select {
+            background: #2d2d2d;
+            border-color: #444;
+            color: #ffffff;
+        }
+
+        html.dark-theme input::placeholder {
+            color: #888;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        html.dark-theme input:focus,
+        html.dark-theme select:focus {
+            background: #2a2a2a;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(93, 125, 245, 0.3);
+        }
+
+        /* Confidence Slider Group */
+        .slider-group {
             display: flex;
             align-items: center;
-            gap: 5px;
-        }
-
-        .dark-theme .error-message {
-            color: #ff4d9f;
-        }
-
-        /* Branch Select */
-        .branch-select {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 15px;
+            gap: 20px;
             margin-top: 10px;
         }
 
-        .branch-option {
-            display: none;
-        }
-
-        .branch-label {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px 15px;
-            background: var(--light);
-            border: 2px solid var(--gray-light);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: var(--transition);
-            text-align: center;
-            color: var(--dark);
-        }
-
-        .dark-theme .branch-label {
-            background: #252540;
-            border-color: #3d3d5c;
-            color: #e0e0e0;
-        }
-
-        .branch-option:checked + .branch-label {
-            border-color: var(--primary);
-            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(114, 9, 183, 0.1));
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        .dark-theme .branch-option:checked + .branch-label {
-            background: linear-gradient(135deg, rgba(93, 125, 245, 0.2), rgba(138, 43, 226, 0.2));
-            color: var(--primary);
-        }
-
-        .branch-label:hover {
-            transform: translateY(-3px);
-            border-color: var(--primary);
-        }
-
-        .branch-icon {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-
-        .branch-name {
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        /* Number Input with Slider */
-        .number-input-group {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .number-slider {
-            flex: 1;
+        .slider {
+            flex: 2;
             -webkit-appearance: none;
             height: 8px;
             background: var(--gray-light);
@@ -427,11 +277,11 @@
             outline: none;
         }
 
-        .dark-theme .number-slider {
-            background: #3d3d5c;
+        html.dark-theme .slider {
+            background: #444;
         }
 
-        .number-slider::-webkit-slider-thumb {
+        .slider::-webkit-slider-thumb {
             -webkit-appearance: none;
             width: 24px;
             height: 24px;
@@ -439,75 +289,24 @@
             border-radius: 50%;
             cursor: pointer;
             transition: var(--transition);
+            border: 2px solid white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
-        .number-slider::-webkit-slider-thumb:hover {
+        html.dark-theme .slider::-webkit-slider-thumb {
+            border-color: #1e1e1e;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
             transform: scale(1.1);
         }
 
-        .number-value {
+        .slider-value {
             min-width: 60px;
             text-align: center;
             font-weight: 600;
             color: var(--primary);
             font-size: 1.2rem;
-        }
-
-        .dark-theme .number-value {
-            color: #7d9dff;
-        }
-
-        /* Skills Input */
-        .skills-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .skill-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(114, 9, 183, 0.1));
-            color: var(--primary);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .dark-theme .skill-tag {
-            background: linear-gradient(135deg, rgba(93, 125, 245, 0.2), rgba(138, 43, 226, 0.2));
-            color: var(--primary);
-        }
-
-        .remove-skill {
-            background: none;
-            border: none;
-            color: var(--accent);
-            cursor: pointer;
-            font-size: 1.2rem;
-            line-height: 1;
-            padding: 0;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .skills-hint, .hint-text {
-            font-size: 0.85rem;
-            color: var(--gray);
-            margin-top: 5px;
-            opacity: 0.85;
-        }
-
-        .dark-theme .skills-hint,
-        .dark-theme .hint-text {
-            color: #b8b8c8;
-            opacity: 1;
         }
 
         /* Confidence Meter */
@@ -523,10 +322,6 @@
             color: var(--gray);
         }
 
-        .dark-theme .meter-labels {
-            color: #b8b8c8;
-        }
-
         .meter-bar {
             height: 12px;
             background: var(--gray-light);
@@ -535,8 +330,8 @@
             margin-bottom: 5px;
         }
 
-        .dark-theme .meter-bar {
-            background: #3d3d5c;
+        html.dark-theme .meter-bar {
+            background: #444;
         }
 
         .meter-fill {
@@ -547,72 +342,77 @@
             transition: width 0.3s ease;
         }
 
-        .dark-theme .meter-fill {
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-        }
-
-        /* Form Actions */
-        .form-actions {
+        /* Skills Input */
+        .skills-preview {
             display: flex;
-            gap: 20px;
-            justify-content: flex-end;
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 2px solid var(--gray-light);
-        }
-
-        .dark-theme .form-actions {
-            border-top-color: #3d3d5c;
-        }
-
-        .btn {
-            padding: 14px 32px;
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
+            flex-wrap: wrap;
             gap: 10px;
-            text-decoration: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: var(--light);
+            border-radius: 10px;
+            border: 1px solid var(--gray-light);
+            min-height: 60px;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
+        html.dark-theme .skills-preview {
+            background: #2d2d2d;
+            border-color: #444;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(67, 97, 238, 0.3);
+        .skill-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(114, 9, 183, 0.1));
+            color: var(--primary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
         }
 
-        .dark-theme .btn-primary:hover {
-            box-shadow: 0 10px 25px rgba(93, 125, 245, 0.3);
+        html.dark-theme .skill-tag {
+            background: linear-gradient(135deg, rgba(93, 125, 245, 0.2), rgba(138, 43, 226, 0.2));
+            color: var(--primary);
         }
 
-        .btn-secondary {
-            background: var(--gray-light);
-            color: var(--dark);
+        .skill-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(67, 97, 238, 0.1);
         }
 
-        .dark-theme .btn-secondary {
-            background: #252540;
-            color: #e0e0e0;
-            border: 1px solid #3d3d5c;
+        .remove-skill {
+            background: none;
+            border: none;
+            color: var(--accent);
+            cursor: pointer;
+            font-size: 1.1rem;
+            line-height: 1;
+            padding: 0 2px;
         }
 
-        .btn-secondary:hover {
-            background: var(--primary);
-            color: white;
+        .remove-skill:hover {
+            transform: scale(1.2);
         }
 
-        /* Tooltips */
+        .skills-hint {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-top: 8px;
+            opacity: 0.7;
+        }
+
+        html.dark-theme .skills-hint {
+            color: #a0a0a0;
+        }
+
+        /* Tooltip */
         .tooltip {
             position: relative;
             display: inline-block;
+            cursor: help;
         }
 
         .tooltip .tooltip-text {
@@ -620,11 +420,11 @@
             width: 200px;
             background: var(--dark);
             color: white;
-            text-align: center;
-            padding: 8px 12px;
-            border-radius: 6px;
+            text-align: left;
+            padding: 10px;
+            border-radius: 8px;
             position: absolute;
-            z-index: 1;
+            z-index: 1000;
             bottom: 125%;
             left: 50%;
             transform: translateX(-50%);
@@ -632,13 +432,13 @@
             transition: opacity 0.3s;
             font-size: 0.85rem;
             font-weight: normal;
+            line-height: 1.4;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
-        .dark-theme .tooltip .tooltip-text {
+        html.dark-theme .tooltip .tooltip-text {
             background: #333;
-            color: white;
             border: 1px solid #555;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
         .tooltip:hover .tooltip-text {
@@ -657,42 +457,85 @@
             border-color: var(--dark) transparent transparent transparent;
         }
 
-        .dark-theme .tooltip .tooltip-text::after {
+        html.dark-theme .tooltip .tooltip-text::after {
             border-color: #333 transparent transparent transparent;
         }
 
-        /* Loading State */
-        .btn-primary.loading {
-            opacity: 0.8;
-            cursor: wait;
+        /* Form Actions */
+        .form-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: flex-end;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid var(--gray-light);
         }
 
-        .btn-primary.loading span {
-            display: inline-block;
-            animation: spin 1s linear infinite;
+        html.dark-theme .form-actions {
+            border-top-color: #444;
         }
 
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        .btn {
+            padding: 16px 32px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            min-width: 160px;
+            justify-content: center;
         }
 
-        /* Responsive Design */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(67, 97, 238, 0.3);
+        }
+
+        html.dark-theme .btn-primary:hover {
+            box-shadow: 0 10px 25px rgba(93, 125, 245, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--gray-light);
+            color: var(--dark);
+            text-decoration: none;
+        }
+
+        html.dark-theme .btn-secondary {
+            background: #333;
+            color: #ffffff;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
             .navbar {
                 padding: 15px 20px;
             }
             
-            .main-content {
-                margin-top: 70px;
-                padding: 15px;
+            .container {
+                margin-top: 80px;
             }
             
             .form-header {
                 padding: 30px 20px;
             }
             
-            .form-title {
+            .form-header h2 {
                 font-size: 2rem;
             }
             
@@ -700,8 +543,10 @@
                 padding: 25px;
             }
             
-            .form-grid {
-                grid-template-columns: 1fr;
+            .slider-group {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
             }
             
             .form-actions {
@@ -710,358 +555,247 @@
             
             .btn {
                 width: 100%;
-                justify-content: center;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .branch-select {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .form-title {
-                font-size: 1.8rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- FIXED NAVIGATION HEADER - Always at top -->
+
+    <!-- Navbar -->
     <nav class="navbar">
-        <a href="/dashboard" class="logo-container">
-            <div class="logo-icon">S</div>
-            <div class="logo-text">Skillify</div>
-        </a>
-        
-        <div class="nav-right">
-            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-                🌙
-            </button>
-        </div>
+        <div class="logo">Skillify</div>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
     </nav>
 
-    <!-- Main Content with proper spacing -->
-    <div class="main-content">
-        <!-- Form Container -->
-        <div class="form-container">
+    <!-- Main Container -->
+    <div class="container">
+        <div class="form-card">
             <!-- Form Header -->
             <div class="form-header">
-                <h1 class="form-title">Student Details</h1>
-                <p class="form-subtitle">Complete your profile to get personalized skill assessments and learning recommendations</p>
+                <h2>Student Details</h2>
+                <p>Complete your profile to get personalized skill assessments and learning recommendations</p>
             </div>
 
-            <!-- Form -->
-            <form class="form-content" action="/form" method="POST" id="studentForm">
-                <!-- Branch Selection -->
-                <div class="form-group">
-                    <label class="form-label">
-                        <span>Academic Branch</span>
-                        <span class="required">*</span>
-                        <div class="tooltip">
-                            <span style="color: var(--gray); font-size: 0.8rem;">(?)</span>
-                            <span class="tooltip-text">Your branch determines the specific skill categories you'll be assessed on</span>
-                        </div>
-                    </label>
+            <!-- Form Content -->
+            <div class="form-content">
+                <form action="/form" method="POST" id="studentForm">
                     
-                    <div class="branch-select">
-                        <input type="radio" id="branch-cse" name="branch" value="CSE" class="branch-option" required>
-                        <label for="branch-cse" class="branch-label">
-                            <div class="branch-icon">💻</div>
-                            <div class="branch-name">Computer Science</div>
-                        </label>
-                        
-                        <input type="radio" id="branch-it" name="branch" value="IT" class="branch-option">
-                        <label for="branch-it" class="branch-label">
-                            <div class="branch-icon">🌐</div>
-                            <div class="branch-name">IT</div>
-                        </label>
-                        
-                        <input type="radio" id="branch-ece" name="branch" value="ECE" class="branch-option">
-                        <label for="branch-ece" class="branch-label">
-                            <div class="branch-icon">⚡</div>
-                            <div class="branch-name">ECE</div>
-                        </label>
-                        
-                        <input type="radio" id="branch-eee" name="branch" value="EEE" class="branch-option">
-                        <label for="branch-eee" class="branch-label">
-                            <div class="branch-icon">🔌</div>
-                            <div class="branch-name">EEE</div>
-                        </label>
-                        
-                        <input type="radio" id="branch-mech" name="branch" value="MECH" class="branch-option">
-                        <label for="branch-mech" class="branch-label">
-                            <div class="branch-icon">⚙️</div>
-                            <div class="branch-name">Mechanical</div>
-                        </label>
-                        
-                        <input type="radio" id="branch-other" name="branch" value="OTHER" class="branch-option">
-                        <label for="branch-other" class="branch-label">
-                            <div class="branch-icon">🎓</div>
-                            <div class="branch-name">Other</div>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Projects & Internships -->
-                <div class="form-grid">
+                    <!-- Branch Selection -->
                     <div class="form-group">
-                        <label class="form-label">
+                        <label>
+                            <span>Academic Branch</span>
+                            <span class="required">*</span>
+                            <div class="tooltip">
+                                <span style="color: var(--gray);">(?)</span>
+                                <span class="tooltip-text">Your branch determines the specific skill categories you'll be assessed on</span>
+                            </div>
+                        </label>
+                        <select name="branch" required>
+                            <option value="">Select Branch</option>
+                            <option value="CSE">Computer Science (CSE)</option>
+                            <option value="IT">Information Technology (IT)</option>
+                            <option value="ECE">Electronics & Communication (ECE)</option>
+                            <option value="EEE">Electrical & Electronics (EEE)</option>
+                            <option value="MECH">Mechanical Engineering (MECH)</option>
+                            <option value="OTHER">Other</option>
+                        </select>
+                    </div>
+
+                    <!-- Projects -->
+                    <div class="form-group">
+                        <label>
                             <span>Projects Completed</span>
                             <span class="required">*</span>
                         </label>
-                        <div class="number-input-group">
-                            <input type="range" min="0" max="20" value="0" class="number-slider" id="projectsSlider">
-                            <input type="number" 
-                                   name="projects" 
-                                   id="projectsInput" 
-                                   class="form-input" 
-                                   required 
-                                   min="0" 
-                                   max="20"
-                                   placeholder="Number of projects">
-                            <div class="number-value" id="projectsValue">0</div>
-                        </div>
-                        <div class="hint-text">
-                            Academic or personal projects demonstrating your skills
-                        </div>
+                        <input type="number" name="projects" min="0" max="20" value="0" required>
                     </div>
-                    
+
+                    <!-- Internships -->
                     <div class="form-group">
-                        <label class="form-label">
+                        <label>
                             <span>Internships Completed</span>
                             <span class="required">*</span>
                         </label>
-                        <div class="number-input-group">
-                            <input type="range" min="0" max="10" value="0" class="number-slider" id="internshipsSlider">
-                            <input type="number" 
-                                   name="internships" 
-                                   id="internshipsInput" 
-                                   class="form-input" 
-                                   required 
-                                   min="0" 
-                                   max="10"
-                                   placeholder="Number of internships">
-                            <div class="number-value" id="internshipsValue">0</div>
-                        </div>
-                        <div class="hint-text">
-                            Industry or research internships (summer/winter)
-                        </div>
+                        <input type="number" name="internships" min="0" max="10" value="0" required>
                     </div>
-                </div>
 
-                <!-- Skills -->
-                <div class="form-group">
-                    <label class="form-label">
-                        <span>Technical Skills</span>
-                        <span class="required">*</span>
-                    </label>
-                    <input type="text" 
-                           name="skills" 
-                           id="skillsInput" 
-                           class="form-input" 
-                           required 
-                           placeholder="Enter skills separated by commas (e.g., Python, JavaScript, Machine Learning, React)">
-                    
-                    <!-- Skills Preview -->
-                    <div id="skillsPreview" class="skills-container">
-                        <!-- Skills will be added here by JavaScript -->
+                    <!-- Skills -->
+                    <div class="form-group">
+                        <label>
+                            <span>Technical Skills</span>
+                            <span class="required">*</span>
+                        </label>
+                        <input type="text" 
+                               name="skills" 
+                               id="skillsInput"
+                               placeholder="Enter skills separated by commas (e.g., Python, Java, SQL, React)" 
+                               required>
+                        
+                        <!-- Skills Preview -->
+                        <div id="skillsPreview" class="skills-preview">
+                            <!-- Skills will appear here -->
+                        </div>
+                        
+                        <p class="skills-hint">Separate skills with commas. Click on a skill tag to remove it.</p>
                     </div>
-                    
-                    <p class="skills-hint">Separate skills with commas. Click on a skill tag to remove it.</p>
-                </div>
 
-                <!-- Confidence Level -->
-                <div class="form-group">
-                    <label class="form-label">
-                        <span>Self-Confidence Level</span>
-                        <span class="required">*</span>
-                        <div class="tooltip">
-                            <span style="color: var(--gray); font-size: 0.8rem;">(?)</span>
-                            <span class="tooltip-text">Rate your confidence in technical skills and problem-solving abilities</span>
+                    <!-- Confidence Level -->
+                    <div class="form-group">
+                        <label>
+                            <span>Self-Confidence Level</span>
+                            <span class="required">*</span>
+                            <div class="tooltip">
+                                <span style="color: var(--gray);">(?)</span>
+                                <span class="tooltip-text">Rate your confidence in technical skills and problem-solving abilities</span>
+                            </div>
+                        </label>
+                        
+                        <div class="slider-group">
+                            <input type="range" min="1" max="10" value="5" class="slider" id="confidenceSlider">
+                            <input type="number" name="confidence" min="1" max="10" value="5" id="confidenceInput">
+                            <span class="slider-value" id="confidenceValue">5</span>
                         </div>
-                    </label>
-                    
-                    <div class="number-input-group">
-                        <input type="range" min="1" max="10" value="5" class="number-slider" id="confidenceSlider">
-                        <input type="number" 
-                               name="confidence" 
-                               id="confidenceInput" 
-                               class="form-input" 
-                               required 
-                               min="1" 
-                               max="10"
-                               placeholder="1-10">
-                        <div class="number-value" id="confidenceValue">5</div>
-                    </div>
-                    
-                    <div class="confidence-meter">
-                        <div class="meter-labels">
-                            <span>Beginner</span>
-                            <span>Intermediate</span>
-                            <span>Expert</span>
-                        </div>
-                        <div class="meter-bar">
-                            <div class="meter-fill" id="confidenceFill"></div>
+                        
+                        <div class="confidence-meter">
+                            <div class="meter-labels">
+                                <span>Beginner (1-3)</span>
+                                <span>Intermediate (4-7)</span>
+                                <span>Expert (8-10)</span>
+                            </div>
+                            <div class="meter-bar">
+                                <div class="meter-fill" id="confidenceFill"></div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Form Actions -->
-                <div class="form-actions">
-                    <a href="/dashboard" class="btn btn-secondary">
-                        <span>←</span>
-                        Back to Dashboard
-                    </a>
-                    <button type="submit" class="btn btn-primary" id="submitBtn">
-                        <span>💾</span>
-                        Save & Continue
-                    </button>
-                </div>
-            </form>
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <a href="/dashboard" class="btn btn-secondary">
+                            <span>←</span>
+                            Back to Dashboard
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <span>💾</span>
+                            Save & Continue
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
     <script>
-        // Enhanced Theme Management
+        // Theme Management
         const themeToggle = document.getElementById('themeToggle');
-        const body = document.body;
         
-        // Detect system preference
-        function detectSystemTheme() {
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                return 'dark';
-            }
-            return 'light';
-        }
-        
-        // Apply theme to the page
         function applyTheme(theme) {
             if (theme === 'dark') {
-                body.classList.add('dark-theme');
+                document.documentElement.classList.add('dark-theme');
                 themeToggle.textContent = '☀️';
                 themeToggle.setAttribute('aria-label', 'Switch to light mode');
             } else {
-                body.classList.remove('dark-theme');
+                document.documentElement.classList.remove('dark-theme');
                 themeToggle.textContent = '🌙';
                 themeToggle.setAttribute('aria-label', 'Switch to dark mode');
             }
         }
-        
-        // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
-            // Theme initialization
-            const savedTheme = localStorage.getItem('skillify-theme');
-            
-            if (savedTheme) {
-                applyTheme(savedTheme);
-            } else {
-                const systemTheme = detectSystemTheme();
-                applyTheme(systemTheme);
-                localStorage.setItem('skillify-theme', systemTheme);
-            }
-            
-            // Listen for system theme changes
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-                if (!localStorage.getItem('skillify-theme')) {
-                    const newTheme = e.matches ? 'dark' : 'light';
-                    applyTheme(newTheme);
-                }
-            });
-            
-            // Initialize form components
-            initializeForm();
-        });
-        
-        // Theme toggle functionality
+
+        // Initialize theme
+        const savedTheme = localStorage.getItem('skillify-theme');
+        applyTheme(savedTheme || 'light');
+
+        // Theme toggle
         themeToggle.addEventListener('click', function() {
-            const isDark = body.classList.contains('dark-theme');
+            const isDark = document.documentElement.classList.contains('dark-theme');
             const newTheme = isDark ? 'light' : 'dark';
-            
-            applyTheme(newTheme);
             localStorage.setItem('skillify-theme', newTheme);
+            applyTheme(newTheme);
             
-            // Add animation feedback
-            this.style.transform = 'scale(1.2)';
+            // Animation
+            this.style.transform = 'scale(1.2) rotate(15deg)';
             setTimeout(() => {
-                this.style.transform = 'scale(1)';
+                this.style.transform = 'scale(1) rotate(0deg)';
             }, 300);
         });
+
+        // Confidence Slider Sync
+        const confidenceSlider = document.getElementById('confidenceSlider');
+        const confidenceInput = document.getElementById('confidenceInput');
+        const confidenceValue = document.getElementById('confidenceValue');
+        const confidenceFill = document.getElementById('confidenceFill');
+
+        function updateConfidence(value) {
+            confidenceSlider.value = value;
+            confidenceInput.value = value;
+            confidenceValue.textContent = value;
+            
+            // Update meter fill
+            const percentage = ((value - 1) / 9) * 100;
+            confidenceFill.style.width = `${percentage}%`;
+        }
+
+        confidenceSlider.addEventListener('input', function() {
+            updateConfidence(this.value);
+        });
+
+        confidenceInput.addEventListener('input', function() {
+            let value = parseInt(this.value) || 5;
+            if (value > 10) value = 10;
+            if (value < 1) value = 1;
+            updateConfidence(value);
+        });
+
+        // Skills Management
+        const skillsInput = document.getElementById('skillsInput');
+        const skillsPreview = document.getElementById('skillsPreview');
+
+        function updateSkillsPreview() {
+            const skillsText = skillsInput.value;
+            const skillsArray = skillsText.split(',').map(skill => skill.trim()).filter(skill => skill.length > 0);
+            
+            skillsPreview.innerHTML = '';
+            
+            skillsArray.forEach((skill, index) => {
+                const skillTag = document.createElement('span');
+                skillTag.className = 'skill-tag';
+                skillTag.innerHTML = `
+                    ${skill}
+                    <button type="button" class="remove-skill" data-index="${index}">×</button>
+                `;
+                
+                // Add remove functionality
+                const removeBtn = skillTag.querySelector('.remove-skill');
+                removeBtn.addEventListener('click', function() {
+                    const currentSkills = skillsInput.value.split(',').map(s => s.trim()).filter(s => s.length > 0);
+                    currentSkills.splice(index, 1);
+                    skillsInput.value = currentSkills.join(', ');
+                    updateSkillsPreview();
+                });
+                
+                skillsPreview.appendChild(skillTag);
+            });
+        }
+
+        skillsInput.addEventListener('input', updateSkillsPreview);
         
-        // Form initialization and management
-        function initializeForm() {
-            // Projects Slider
-            const projectsSlider = document.getElementById('projectsSlider');
-            const projectsInput = document.getElementById('projectsInput');
-            const projectsValue = document.getElementById('projectsValue');
+        // Form validation
+        document.getElementById('studentForm').addEventListener('submit', function(e) {
+            const branch = document.querySelector('select[name="branch"]').value;
+            const skills = document.getElementById('skillsInput').value.trim();
             
-            projectsSlider.addEventListener('input', function() {
-                projectsInput.value = this.value;
-                projectsValue.textContent = this.value;
-            });
-            
-            projectsInput.addEventListener('input', function() {
-                if (this.value > 20) this.value = 20;
-                if (this.value < 0) this.value = 0;
-                projectsSlider.value = this.value;
-                projectsValue.textContent = this.value;
-            });
-            
-            // Internships Slider
-            const internshipsSlider = document.getElementById('internshipsSlider');
-            const internshipsInput = document.getElementById('internshipsInput');
-            const internshipsValue = document.getElementById('internshipsValue');
-            
-            internshipsSlider.addEventListener('input', function() {
-                internshipsInput.value = this.value;
-                internshipsValue.textContent = this.value;
-            });
-            
-            internshipsInput.addEventListener('input', function() {
-                if (this.value > 10) this.value = 10;
-                if (this.value < 0) this.value = 0;
-                internshipsSlider.value = this.value;
-                internshipsValue.textContent = this.value;
-            });
-            
-            // Confidence Slider
-            const confidenceSlider = document.getElementById('confidenceSlider');
-            const confidenceInput = document.getElementById('confidenceInput');
-            const confidenceValue = document.getElementById('confidenceValue');
-            const confidenceFill = document.getElementById('confidenceFill');
-            
-            confidenceSlider.addEventListener('input', function() {
-                confidenceInput.value = this.value;
-                confidenceValue.textContent = this.value;
-                updateConfidenceFill();
-            });
-            
-            confidenceInput.addEventListener('input', function() {
-                if (this.value > 10) this.value = 10;
-                if (this.value < 1) this.value = 1;
-                confidenceSlider.value = this.value;
-                confidenceValue.textContent = this.value;
-                updateConfidenceFill();
-            });
-            
-            function updateConfidenceFill() {
-                const value = parseInt(confidenceSlider.value);
-                const percentage = ((value - 1) / 9) * 100;
-                confidenceFill.style.width = `${percentage}%`;
+            if (!branch) {
+                e.preventDefault();
+                alert('Please select your branch');
+                return;
             }
             
-            // Initialize confidence fill
-            updateConfidenceFill();
-            
-            // Skills Management
-            const skillsInput = document.getElementById('skillsInput');
-            const skillsPreview = document.getElementById('skillsPreview');
-            
-            function updateSkillsPreview() {
-                const skillsText = skillsInput.value;
-                const skillsArray = skillsText.split(',').map(skill => skill.trim()).filter(skill => skill.length > 0);
-                
-                skillsPreview.innerHTML = '';
-                
-                skillsArray.forEach((skill, index) => {
-                    const skillTag = document.createElement('div');
-                    skillTag.className = 'skill-tag
+            if (!skills) {
+                e.preventDefault();
+                alert('Please enter your skills');
+                return;
+            }
+        });
+    </script>
+
+</body>
+</html>
