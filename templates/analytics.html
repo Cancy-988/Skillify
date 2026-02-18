@@ -3,6 +3,7 @@
 <head>
     <title>Analytics Dashboard | Skillify</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
@@ -528,56 +529,52 @@
                         <div class="chart-title">
                             <i class="fas fa-chart-bar"></i> Category Performance
                         </div>
-                        <div class="chart-legend">
-                            <div class="legend-item">
-                                <div class="legend-color" style="background-color: var(--primary);"></div>
-                                <span>Your Score</span>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-color" style="background-color: var(--secondary);"></div>
-                                <span>Category Average</span>
-                            </div>
-                        </div>
+                        <div class="chart-legend" id="barChartLegend"></div>
                     </div>
                     <canvas id="barChart"></canvas>
+                    <p style="text-align: center; margin-top: 12px; color: var(--text-secondary); font-size: 13px;"><i class="fas fa-info-circle"></i> Higher bars indicate stronger performance in each skill category</p>
                 </div>
 
                 <!-- Horizontal Bar Chart -->
                 <div class="chart-container">
                     <div class="chart-header">
                         <div class="chart-title">
-                            <i class="fas fa-sort-amount-down"></i> Strength Ranking
+                            <i class="fas fa-sort-amount-down"></i> Skill Ranking (Best to Weakest)
                         </div>
-                        <div class="chart-legend">
-                            <div class="legend-item">
-                                <div class="legend-color" style="background-color: #4bc0c0;"></div>
-                                <span>Skill Strength</span>
-                            </div>
-                        </div>
+                        <div class="chart-legend" id="horizontalChartLegend"></div>
                     </div>
                     <canvas id="horizontalChart"></canvas>
+                    <p style="text-align: center; margin-top: 12px; color: var(--text-secondary); font-size: 13px;"><i class="fas fa-lightbulb"></i> Focus on improving your lowest-ranked skills first</p>
                 </div>
 
                 <!-- Line Chart -->
                 <div class="chart-container">
                     <div class="chart-header">
                         <div class="chart-title">
-                            <i class="fas fa-chart-line"></i> Performance Over Time
+                            <i class="fas fa-chart-line"></i> Performance Trends Over Time
                         </div>
                         <div class="chart-legend" id="lineChartLegend"></div>
                     </div>
                     <canvas id="lineChart"></canvas>
+                    <p style="text-align: center; margin-top: 12px; color: var(--text-secondary); font-size: 13px;"><i class="fas fa-chart-line"></i> Track your progress across multiple assessment sessions</p>
                 </div>
 
-                <!-- Pie Chart -->
+                <!-- Doughnut Chart -->
                 <div class="chart-container">
                     <div class="chart-header">
                         <div class="chart-title">
-                            <i class="fas fa-chart-pie"></i> Skill Distribution
+                            <i class="fas fa-chart-pie"></i> Score Distribution by Category
                         </div>
                         <div class="chart-legend" id="pieChartLegend"></div>
                     </div>
-                    <canvas id="pieChart"></canvas>
+                    <div style="position: relative;">
+                        <canvas id="pieChart"></canvas>
+                        <div id="doughnutCenter" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none;">
+                            <div style="font-size: 28px; font-weight: 700; color: var(--primary);">{{ scores|sum }}</div>
+                            <div style="font-size: 12px; color: var(--text-secondary);">Total Points</div>
+                        </div>
+                    </div>
+                    <p style="text-align: center; margin-top: 12px; color: var(--text-secondary); font-size: 13px;"><i class="fas fa-info-circle"></i> Shows how your points are distributed across skill categories</p>
                 </div>
             </div>
         {% endif %}
@@ -647,8 +644,22 @@
             const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
             const textColor = isDark ? '#f0f0ff' : '#2d2b55';
             
+            // Distinct colors for each category
+            const categoryColors = [
+                isDark ? '#7c6cfc' : '#6a5af9',  // Purple
+                isDark ? '#ff7b9a' : '#ff6b8b',  // Pink
+                isDark ? '#00e6b8' : '#00d4aa',  // Teal
+                isDark ? '#36a2eb' : '#2196F3',  // Blue
+                isDark ? '#ffcd56' : '#FF9800',  // Orange
+                isDark ? '#9966ff' : '#9C27B0',  // Deep Purple
+                isDark ? '#4bc0c0' : '#009688',  // Cyan
+                isDark ? '#ff6384' : '#E91E63',  // Magenta
+                isDark ? '#c9cbcf' : '#607D8B',  // Blue Gray
+                isDark ? '#8bc34a' : '#4CAF50'   // Green
+            ];
+            
             return {
-                primary, secondary, accent, success, warning, info, purple, gray, gridColor, textColor
+                primary, secondary, accent, success, warning, info, purple, gray, gridColor, textColor, categoryColors
             };
         }
 
@@ -688,18 +699,12 @@
                     labels: categories,
                     datasets: [
                         {
-                            label: 'Your Score',
-                            data: scores,
-                            backgroundColor: colors.primary,
+                            label: 'Your Score (%)',
+                            data: percentages,
+                            backgroundColor: categories.map((_, i) => colors.categoryColors[i % colors.categoryColors.length]),
                             borderRadius: 8,
-                            borderWidth: 0
-                        },
-                        {
-                            label: 'Category Average',
-                            data: totals.map(total => total * 0.75), // Simulated average
-                            backgroundColor: colors.secondary,
-                            borderRadius: 8,
-                            borderWidth: 0
+                            borderWidth: 0,
+                            barPercentage: 0.7
                         }
                     ]
                 },
@@ -710,18 +715,40 @@
                             display: false
                         },
                         tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleFont: { size: 14, weight: 'bold' },
+                            bodyFont: { size: 13 },
+                            padding: 12,
                             callbacks: {
+                                title: function(context) {
+                                    return context[0].label + ' Performance';
+                                },
                                 label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
+                                    const index = context.dataIndex;
+                                    const pct = percentages[index];
+                                    let status = pct >= 80 ? '🌟 Excellent' : pct >= 60 ? '✅ Good' : pct >= 40 ? '⚠️ Needs Work' : '❗ Focus Area';
+                                    return [
+                                        `Score: ${scores[index]}/${totals[index]} (${pct}%)`,
+                                        `Status: ${status}`
+                                    ];
+                                }
+                            }
+                        },
+                        // Target line annotation
+                        annotation: {
+                            annotations: {
+                                targetLine: {
+                                    type: 'line',
+                                    yMin: 80,
+                                    yMax: 80,
+                                    borderColor: colors.accent,
+                                    borderWidth: 2,
+                                    borderDash: [6, 6],
+                                    label: {
+                                        display: true,
+                                        content: 'Target: 80%',
+                                        position: 'end'
                                     }
-                                    label += context.raw;
-                                    if (context.datasetIndex === 0) {
-                                        const index = context.dataIndex;
-                                        label += ` marks (${percentages[index]}%)`;
-                                    }
-                                    return label;
                                 }
                             }
                         }
@@ -729,16 +756,21 @@
                     scales: {
                         y: {
                             beginAtZero: true,
+                            max: 100,
                             grid: {
                                 color: colors.gridColor
                             },
                             ticks: {
-                                color: colors.textColor
+                                color: colors.textColor,
+                                callback: function(value) {
+                                    return value + '%';
+                                }
                             },
                             title: {
                                 display: true,
-                                text: 'Score (marks)',
-                                color: colors.textColor
+                                text: 'Performance (%)',
+                                color: colors.textColor,
+                                font: { weight: 'bold' }
                             }
                         },
                         x: {
@@ -746,11 +778,31 @@
                                 display: false
                             },
                             ticks: {
-                                color: colors.textColor
+                                color: colors.textColor,
+                                font: { weight: '500' }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Skill Categories',
+                                color: colors.textColor,
+                                font: { weight: 'bold' }
                             }
                         }
                     }
                 }
+            });
+
+            // Create legend for bar chart
+            const barLegend = document.getElementById('barChartLegend');
+            barLegend.innerHTML = '';
+            categories.forEach((cat, i) => {
+                const legendItem = document.createElement('div');
+                legendItem.className = 'legend-item';
+                legendItem.innerHTML = `
+                    <div class="legend-color" style="background-color: ${colors.categoryColors[i % colors.categoryColors.length]};"></div>
+                    <span>${cat}</span>
+                `;
+                barLegend.appendChild(legendItem);
             });
 
             const horizontalCtx = document.getElementById('horizontalChart').getContext('2d');
@@ -760,18 +812,14 @@
             horizontalChartInstance = new Chart(horizontalCtx, {
                 type: 'bar',
                 data: {
-                    labels: sortedCategories,
+                    labels: sortedCategories.map((cat, i) => `${i === 0 ? '🥇 ' : i === 1 ? '🥈 ' : i === 2 ? '🥉 ' : ''}${cat}`),
                     datasets: [{
                         label: 'Skill Strength (%)',
                         data: sortedPercentages,
-                        backgroundColor: sortedPercentages.map(p => {
-                            if (p >= 80) return colors.success;
-                            if (p >= 60) return colors.accent;
-                            if (p >= 40) return colors.warning;
-                            return colors.secondary;
-                        }),
+                        backgroundColor: sortedIndices.map(origIndex => colors.categoryColors[origIndex % colors.categoryColors.length]),
                         borderRadius: 6,
-                        borderWidth: 0
+                        borderWidth: 0,
+                        barPercentage: 0.8
                     }]
                 },
                 options: {
@@ -782,9 +830,20 @@
                             display: false
                         },
                         tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            padding: 12,
                             callbacks: {
+                                title: function(context) {
+                                    const rank = context[0].dataIndex + 1;
+                                    return `Rank #${rank}: ${sortedCategories[context[0].dataIndex]}`;
+                                },
                                 label: function(context) {
-                                    return `Strength: ${context.raw}%`;
+                                    const pct = context.raw;
+                                    let level = pct >= 80 ? 'Expert' : pct >= 60 ? 'Proficient' : pct >= 40 ? 'Developing' : 'Beginner';
+                                    return [
+                                        `Mastery: ${pct}%`,
+                                        `Level: ${level}`
+                                    ];
                                 }
                             }
                         }
@@ -797,12 +856,16 @@
                                 color: colors.gridColor
                             },
                             ticks: {
-                                color: colors.textColor
+                                color: colors.textColor,
+                                callback: function(value) {
+                                    return value + '%';
+                                }
                             },
                             title: {
                                 display: true,
-                                text: 'Percentage (%)',
-                                color: colors.textColor
+                                text: 'Mastery Level (%)',
+                                color: colors.textColor,
+                                font: { weight: 'bold' }
                             }
                         },
                         y: {
@@ -810,11 +873,26 @@
                                 display: false
                             },
                             ticks: {
-                                color: colors.textColor
+                                color: colors.textColor,
+                                font: { weight: '500' }
                             }
                         }
                     }
                 }
+            });
+
+            // Create legend for horizontal bar chart
+            const horizLegend = document.getElementById('horizontalChartLegend');
+            horizLegend.innerHTML = '';
+            sortedCategories.forEach((cat, i) => {
+                const origIndex = sortedIndices[i];
+                const legendItem = document.createElement('div');
+                legendItem.className = 'legend-item';
+                legendItem.innerHTML = `
+                    <div class="legend-color" style="background-color: ${colors.categoryColors[origIndex % colors.categoryColors.length]};"></div>
+                    <span>${cat}</span>
+                `;
+                horizLegend.appendChild(legendItem);
             });
 
             // 3. LINE CHART - Performance Over Time
@@ -827,11 +905,13 @@
             
             let colorIndex = 0;
             for (let cat in history) {
+                const catIndex = categories.indexOf(cat);
+                const lineColor = catIndex >= 0 ? colors.categoryColors[catIndex % colors.categoryColors.length] : colorPalette[colorIndex % colorPalette.length];
                 lineDatasets.push({
                     label: cat.toUpperCase(),
                     data: history[cat],
-                    borderColor: colorPalette[colorIndex % colorPalette.length],
-                    backgroundColor: colorPalette[colorIndex % colorPalette.length] + '20',
+                    borderColor: lineColor,
+                    backgroundColor: lineColor + '20',
                     borderWidth: 3,
                     tension: 0.2,
                     fill: false,
@@ -852,10 +932,32 @@
                 },
                 options: {
                     responsive: true,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
                     plugins: {
                         tooltip: {
-                            mode: 'index',
-                            intersect: false
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleFont: { size: 14, weight: 'bold' },
+                            bodyFont: { size: 12 },
+                            padding: 12,
+                            callbacks: {
+                                title: function(context) {
+                                    return '📅 ' + context[0].label;
+                                },
+                                label: function(context) {
+                                    const value = context.raw;
+                                    let trend = '';
+                                    if (context.dataIndex > 0) {
+                                        const prev = context.dataset.data[context.dataIndex - 1];
+                                        if (value > prev) trend = ' ↑';
+                                        else if (value < prev) trend = ' ↓';
+                                        else trend = ' →';
+                                    }
+                                    return `${context.dataset.label}: ${value}%${trend}`;
+                                }
+                            }
                         }
                     },
                     scales: {
@@ -866,12 +968,16 @@
                                 color: colors.gridColor
                             },
                             ticks: {
-                                color: colors.textColor
+                                color: colors.textColor,
+                                callback: function(value) {
+                                    return value + '%';
+                                }
                             },
                             title: {
                                 display: true,
-                                text: 'Score (%)',
-                                color: colors.textColor
+                                text: 'Performance Score (%)',
+                                color: colors.textColor,
+                                font: { weight: 'bold' }
                             }
                         },
                         x: {
@@ -880,6 +986,12 @@
                             },
                             ticks: {
                                 color: colors.textColor
+                            },
+                            title: {
+                                display: true,
+                                text: 'Assessment Date',
+                                color: colors.textColor,
+                                font: { weight: 'bold' }
                             }
                         }
                     }
@@ -904,37 +1016,46 @@
             
             if (pieChartInstance) pieChartInstance.destroy();
             
+            // Calculate percentage distribution for doughnut chart
+            const totalScore = scores.reduce((a, b) => a + b, 0);
+            const distributionPct = scores.map(s => totalScore > 0 ? Math.round((s / totalScore) * 100) : 0);
+            
             pieChartInstance = new Chart(pieCtx, {
-                type: 'pie',
+                type: 'doughnut',
                 data: {
                     labels: categories,
                     datasets: [{
                         data: scores,
-                        backgroundColor: [
-                            colors.primary,
-                            colors.secondary,
-                            colors.accent,
-                            colors.success,
-                            colors.warning,
-                            colors.info,
-                            colors.purple
-                        ],
-                        borderWidth: 0,
-                        hoverOffset: 15
+                        backgroundColor: categories.map((_, i) => colors.categoryColors[i % colors.categoryColors.length]),
+                        borderWidth: 2,
+                        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--card-bg').trim() || '#ffffff',
+                        hoverOffset: 15,
+                        hoverBorderWidth: 3
                     }]
                 },
                 options: {
                     responsive: true,
+                    cutout: '55%',
                     plugins: {
                         legend: {
                             display: false
                         },
                         tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            padding: 12,
                             callbacks: {
+                                title: function(context) {
+                                    return context[0].label;
+                                },
                                 label: function(context) {
-                                    const label = context.label || '';
-                                    const value = context.raw || 0;
-                                    return `${label}: ${value}%`;
+                                    const index = context.dataIndex;
+                                    const score = scores[index];
+                                    const total = totals[index];
+                                    const pct = distributionPct[index];
+                                    return [
+                                        `Points: ${score}/${total}`,
+                                        `Share: ${pct}% of total`
+                                    ];
                                 }
                             }
                         }
