@@ -3,6 +3,7 @@ import sqlite3
 import os
 import json
 import pickle
+import random
 
 
 
@@ -146,25 +147,31 @@ def quiz_category(category):
     if "user_name" not in session:
         return redirect("/login")
 
-    questions = load_questions()
+    all_questions = load_questions()
 
-    if category not in questions:
+    if category not in all_questions:
         return "Quiz category not found!"
 
     if request.method == "POST":
+        # Get the questions that were shown to the user from session
+        quiz_questions = session.get("current_quiz_questions", [])
         answers = []
-        for i in range(1, 6):
+        for i in range(1, len(quiz_questions) + 1):
             user_ans = request.form.get(f"q{i}")
             answers.append(user_ans)
 
-  
         session["quiz_answers"] = answers
         session["quiz_category"] = category
 
         return redirect("/result")
 
-
-    quiz_questions = questions[category]
+    # Randomly select 5 questions from the pool for this quiz attempt
+    question_pool = all_questions[category]
+    quiz_questions = random.sample(question_pool, min(5, len(question_pool)))
+    
+    # Store selected questions in session for answer verification
+    session["current_quiz_questions"] = quiz_questions
+    
     return render_template("quiz.html", questions=quiz_questions, category=category)
 
 
@@ -296,10 +303,14 @@ def submit_quiz(category):
     if request.method == "GET":
         return redirect(f"/quiz/{category}")
     
-    questions = load_questions()[category]
+    # Get the randomly selected questions from session (not all questions)
+    questions = session.get("current_quiz_questions", [])
+    if not questions:
+        # Fallback in case session expired
+        return redirect(f"/quiz/{category}")
+    
     score = 0
 
- 
     for i, q in enumerate(questions, start=1):
         user_ans = request.form.get(f"q{i}")
         if user_ans == q["answer"]:

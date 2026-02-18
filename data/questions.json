@@ -24,6 +24,56 @@
             "question": "What is the opposite of 'Increase'?",
             "options": ["Reduce", "Enhance", "Expand", "Grow"],
             "answer": "Reduce"
+        },
+        {
+            "question": "If 5x + 3 = 28, what is the value of x?",
+            "options": ["3", "4", "5", "6"],
+            "answer": "5"
+        },
+        {
+            "question": "A shopkeeper sells an item for Rs. 450 at 10% profit. What was the cost price?",
+            "options": ["Rs. 400", "Rs. 405", "Rs. 409", "Rs. 410"],
+            "answer": "Rs. 409"
+        },
+        {
+            "question": "What is 25% of 200?",
+            "options": ["40", "50", "60", "75"],
+            "answer": "50"
+        },
+        {
+            "question": "The ratio of two numbers is 3:5. If their sum is 80, find the smaller number.",
+            "options": ["25", "30", "35", "40"],
+            "answer": "30"
+        },
+        {
+            "question": "A can complete a work in 10 days and B in 15 days. How many days will they take together?",
+            "options": ["5 days", "6 days", "7 days", "8 days"],
+            "answer": "6 days"
+        },
+        {
+            "question": "Find the missing number: 3, 9, 27, 81, ?",
+            "options": ["162", "243", "324", "729"],
+            "answer": "243"
+        },
+        {
+            "question": "If the simple interest on Rs. 1000 for 2 years is Rs. 200, what is the rate of interest?",
+            "options": ["5%", "8%", "10%", "12%"],
+            "answer": "10%"
+        },
+        {
+            "question": "A car travels 180 km in 4 hours. What is its average speed?",
+            "options": ["40 km/hr", "45 km/hr", "50 km/hr", "55 km/hr"],
+            "answer": "45 km/hr"
+        },
+        {
+            "question": "What is the LCM of 12 and 18?",
+            "options": ["6", "36", "72", "108"],
+            "answer": "36"
+        },
+        {
+            "question": "If a rectangle has length 8 cm and width 5 cm, what is its area?",
+            "options": ["26 sq cm", "40 sq cm", "45 sq cm", "50 sq cm"],
+            "answer": "40 sq cm"
         }
     ],
 
@@ -52,6 +102,56 @@
             "question": "Which structure is used in recursion?",
             "options": ["Queue", "Stack", "Array", "Graph"],
             "answer": "Stack"
+        },
+        {
+            "question": "What is the worst case time complexity of Quick Sort?",
+            "options": ["O(n)", "O(n log n)", "O(n^2)", "O(log n)"],
+            "answer": "O(n^2)"
+        },
+        {
+            "question": "Which data structure is best for implementing LRU cache?",
+            "options": ["Array", "Stack", "HashMap + Doubly Linked List", "Queue"],
+            "answer": "HashMap + Doubly Linked List"
+        },
+        {
+            "question": "What is the height of a complete binary tree with n nodes?",
+            "options": ["O(n)", "O(log n)", "O(n^2)", "O(1)"],
+            "answer": "O(log n)"
+        },
+        {
+            "question": "Which algorithm is used to find shortest path in weighted graph?",
+            "options": ["DFS", "BFS", "Dijkstra", "Prim's"],
+            "answer": "Dijkstra"
+        },
+        {
+            "question": "What is the time complexity of inserting at the beginning of a linked list?",
+            "options": ["O(1)", "O(n)", "O(log n)", "O(n^2)"],
+            "answer": "O(1)"
+        },
+        {
+            "question": "Which sorting algorithm has best average case performance?",
+            "options": ["Bubble Sort", "Selection Sort", "Merge Sort", "Insertion Sort"],
+            "answer": "Merge Sort"
+        },
+        {
+            "question": "What data structure is used in BFS?",
+            "options": ["Stack", "Queue", "Priority Queue", "Deque"],
+            "answer": "Queue"
+        },
+        {
+            "question": "What is a balanced binary tree?",
+            "options": ["All leaves at same level", "Height difference <= 1", "Complete tree", "Full tree"],
+            "answer": "Height difference <= 1"
+        },
+        {
+            "question": "Which operation is NOT O(1) in a hash table?",
+            "options": ["Insert", "Search", "Delete", "Traversal"],
+            "answer": "Traversal"
+        },
+        {
+            "question": "What is the time complexity of heap sort?",
+            "options": ["O(n)", "O(n log n)", "O(n^2)", "O(log n)"],
+            "answer": "O(n log n)"
         }
     ],
 
@@ -80,6 +180,56 @@
             "question": "What is ACID in DBMS?",
             "options": ["Transaction properties", "Query language", "Security model", "Backup process"],
             "answer": "Transaction properties"
+        },
+        {
+            "question": "Which SQL clause is used to filter groups?",
+            "options": ["WHERE", "HAVING", "GROUP BY", "ORDER BY"],
+            "answer": "HAVING"
+        },
+        {
+            "question": "What is a foreign key?",
+            "options": ["Primary key of same table", "Reference to another table", "Unique constraint", "Index key"],
+            "answer": "Reference to another table"
+        },
+        {
+            "question": "Which join returns all rows from both tables?",
+            "options": ["INNER JOIN", "LEFT JOIN", "RIGHT JOIN", "FULL OUTER JOIN"],
+            "answer": "FULL OUTER JOIN"
+        },
+        {
+            "question": "What does TRUNCATE do?",
+            "options": ["Delete specific rows", "Delete all rows quickly", "Drop table", "Modify table"],
+            "answer": "Delete all rows quickly"
+        },
+        {
+            "question": "Which normal form removes transitive dependency?",
+            "options": ["1NF", "2NF", "3NF", "BCNF"],
+            "answer": "3NF"
+        },
+        {
+            "question": "What is a view in SQL?",
+            "options": ["Physical table", "Virtual table", "Temporary table", "Index"],
+            "answer": "Virtual table"
+        },
+        {
+            "question": "Which command is used to add a column?",
+            "options": ["ADD COLUMN", "ALTER TABLE", "UPDATE TABLE", "MODIFY TABLE"],
+            "answer": "ALTER TABLE"
+        },
+        {
+            "question": "What is indexing used for?",
+            "options": ["Security", "Faster retrieval", "Data integrity", "Backup"],
+            "answer": "Faster retrieval"
+        },
+        {
+            "question": "Which isolation level prevents dirty reads?",
+            "options": ["Read Uncommitted", "Read Committed", "Serializable", "Repeatable Read"],
+            "answer": "Read Committed"
+        },
+        {
+            "question": "What is a stored procedure?",
+            "options": ["Temporary query", "Precompiled SQL statements", "View", "Trigger"],
+            "answer": "Precompiled SQL statements"
         }
     ],
 
@@ -108,6 +258,56 @@
             "question": "Which OS uses time-sharing?",
             "options": ["Batch OS", "Real-time OS", "Interactive OS", "Distributed OS"],
             "answer": "Interactive OS"
+        },
+        {
+            "question": "What is virtual memory?",
+            "options": ["RAM extension using disk", "Cache memory", "ROM", "Register"],
+            "answer": "RAM extension using disk"
+        },
+        {
+            "question": "Which page replacement algorithm is optimal?",
+            "options": ["FIFO", "LRU", "Optimal", "Random"],
+            "answer": "Optimal"
+        },
+        {
+            "question": "What is a semaphore used for?",
+            "options": ["Memory management", "Process synchronization", "File system", "Networking"],
+            "answer": "Process synchronization"
+        },
+        {
+            "question": "Which memory allocation strategy causes external fragmentation?",
+            "options": ["Paging", "Segmentation", "Virtual memory", "Caching"],
+            "answer": "Segmentation"
+        },
+        {
+            "question": "What is a context switch?",
+            "options": ["Changing OS", "Switching between processes", "Memory swap", "Disk access"],
+            "answer": "Switching between processes"
+        },
+        {
+            "question": "Which is NOT a process state?",
+            "options": ["Running", "Ready", "Blocked", "Compiled"],
+            "answer": "Compiled"
+        },
+        {
+            "question": "What is the purpose of a page table?",
+            "options": ["Track file locations", "Map virtual to physical addresses", "Store processes", "Manage I/O"],
+            "answer": "Map virtual to physical addresses"
+        },
+        {
+            "question": "Which scheduling minimizes average waiting time?",
+            "options": ["FCFS", "SJF", "Round Robin", "Priority"],
+            "answer": "SJF"
+        },
+        {
+            "question": "What is a thread?",
+            "options": ["Light-weight process", "Heavy process", "Memory unit", "File descriptor"],
+            "answer": "Light-weight process"
+        },
+        {
+            "question": "Which condition is NOT required for deadlock?",
+            "options": ["Mutual Exclusion", "Hold and Wait", "Preemption", "Circular Wait"],
+            "answer": "Preemption"
         }
     ]
 }
