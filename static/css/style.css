@@ -117,5 +117,171 @@ body {
     text-decoration: underline;
 }
 
+/* ===== RESPONSIVE DESIGN ===== */
 
+/* Mobile Navigation */
+.mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 8px;
+    color: var(--dark, #212529);
+    z-index: 1001;
+}
 
+/* Tablet screens (max 1024px) */
+@media (max-width: 1024px) {
+    .summary-container {
+        gap: 20px;
+    }
+    
+    .summary-card {
+        width: 200px;
+        padding: 18px;
+    }
+    
+    .card-value {
+        font-size: 24px;
+    }
+}
+
+/* Mobile screens (max 768px) */
+@media (max-width: 768px) {
+    body {
+        height: auto;
+        min-height: 100vh;
+        padding: 10px;
+    }
+    
+    .login-box {
+        width: 100%;
+        max-width: 350px;
+        padding: 20px;
+        margin: 20px auto;
+    }
+    
+    .login-box h2 {
+        font-size: 22px;
+        margin-bottom: 15px;
+    }
+    
+    .login-box input {
+        padding: 12px;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+    
+    .login-box button {
+        padding: 12px;
+        font-size: 16px;
+    }
+    
+    .summary-container {
+        width: 95%;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+    }
+    
+    .summary-card {
+        width: 100%;
+        max-width: 320px;
+        padding: 20px;
+    }
+    
+    .card-value {
+        font-size: 26px;
+    }
+    
+    .card-emoji {
+        font-size: 28px;
+    }
+    
+    .mobile-menu-toggle {
+        display: block;
+    }
+}
+
+/* Small mobile screens (max 480px) */
+@media (max-width: 480px) {
+    body {
+        padding: 5px;
+    }
+    
+    .login-box {
+        padding: 15px;
+        border-radius: 10px;
+    }
+    
+    .login-box h2 {
+        font-size: 20px;
+    }
+    
+    .login-box input {
+        padding: 10px;
+        margin: 6px 0;
+    }
+    
+    .summary-container {
+        width: 100%;
+        padding: 10px;
+        margin: 15px auto;
+    }
+    
+    .summary-card {
+        padding: 15px;
+        border-radius: 12px;
+    }
+    
+    .card-title {
+        font-size: 14px;
+    }
+    
+    .card-value {
+        font-size: 22px;
+    }
+    
+    .card-emoji {
+        font-size: 24px;
+    }
+    
+    .admin-login {
+        margin-top: 12px;
+        padding-top: 10px;
+    }
+    
+    .admin-login a {
+        font-size: 13px;
+    }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+    .login-box button,
+    .summary-card {
+        min-height: 44px;
+    }
+    
+    .login-box input {
+        min-height: 44px;
+    }
+    
+    .admin-login a {
+        padding: 10px;
+        display: inline-block;
+    }
+}
+
+/* Landscape mobile orientation */
+@media (max-height: 500px) and (orientation: landscape) {
+    body {
+        height: auto;
+        padding: 10px;
+    }
+    
+    .login-box {
+        margin: 10px auto;
+    }
+}

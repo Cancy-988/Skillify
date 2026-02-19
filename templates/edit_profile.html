@@ -575,15 +575,19 @@
         }
 
         .edit-header {
-          padding: 30px 20px;
+          padding: 25px 20px;
         }
 
         .edit-title {
-          font-size: 2rem;
+          font-size: 1.8rem;
+        }
+
+        .edit-subtitle {
+          font-size: 0.95rem;
         }
 
         .form-content {
-          padding: 25px;
+          padding: 20px;
         }
 
         .form-grid {
@@ -598,16 +602,72 @@
           width: 100%;
           justify-content: center;
         }
+
+        input,
+        select,
+        textarea {
+          font-size: 16px; /* Prevents zoom on iOS */
+        }
       }
 
       @media (max-width: 480px) {
+        body {
+          padding: 10px;
+        }
+
+        .navbar {
+          padding: 12px 15px;
+          border-radius: 12px;
+        }
+
+        .logo-text {
+          font-size: 20px;
+        }
+
+        .edit-container {
+          margin: 0 5px;
+        }
+
+        .edit-header {
+          padding: 20px 15px;
+        }
+
         .profile-preview {
           flex-direction: column;
           text-align: center;
         }
 
         .edit-title {
-          font-size: 1.8rem;
+          font-size: 1.5rem;
+        }
+
+        .form-content {
+          padding: 15px;
+        }
+
+        .form-section {
+          margin-bottom: 25px;
+        }
+
+        .section-title {
+          font-size: 1rem;
+        }
+
+        .current-avatar,
+        .no-avatar {
+          width: 80px;
+          height: 80px;
+        }
+      }
+
+      /* Touch-friendly */
+      @media (hover: none) and (pointer: coarse) {
+        .btn,
+        input,
+        select,
+        textarea,
+        .theme-toggle {
+          min-height: 44px;
         }
       }
     </style>

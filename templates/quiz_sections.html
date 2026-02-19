@@ -573,31 +573,116 @@
         .nav-right {
           width: 100%;
           justify-content: space-between;
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+
+        .user-profile span {
+          display: none;
         }
 
         .main-container {
-          padding: 20px;
+          padding: 15px;
         }
 
         .hero-title {
+          font-size: 1.8rem;
+        }
+
+        .hero-subtitle {
+          font-size: 1rem;
+        }
+
+        .stats-container {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 15px;
+        }
+
+        .stat-card {
+          padding: 20px 15px;
+        }
+
+        .stat-number {
           font-size: 2rem;
+        }
+
+        .quiz-cards-grid {
+          grid-template-columns: 1fr;
+          gap: 20px;
+        }
+
+        .quiz-card {
+          padding: 22px;
+        }
+
+        .progress-steps {
+          flex-direction: column;
+          gap: 25px;
+        }
+
+        .progress-steps::before {
+          display: none;
+        }
+
+        .logout-btn {
+          padding: 8px 14px;
+          font-size: 14px;
+        }
+
+        .theme-toggle {
+          width: 40px;
+          height: 40px;
+        }
+      }
+
+      /* Small mobile screens */
+      @media (max-width: 480px) {
+        .navbar {
+          padding: 12px 15px;
+        }
+
+        .logo-text {
+          font-size: 20px;
+        }
+
+        .main-container {
+          padding: 10px;
+        }
+
+        .hero-section {
+          padding: 25px 15px;
+        }
+
+        .hero-title {
+          font-size: 1.5rem;
+        }
+
+        .branch-indicator {
+          font-size: 13px;
+          padding: 6px 12px;
         }
 
         .stats-container {
           grid-template-columns: 1fr;
         }
 
-        .quiz-cards-grid {
-          grid-template-columns: 1fr;
+        .quiz-card {
+          padding: 18px;
         }
 
-        .progress-steps {
-          flex-direction: column;
-          gap: 30px;
+        .footer {
+          padding: 25px 0 15px;
+          font-size: 13px;
         }
+      }
 
-        .progress-steps::before {
-          display: none;
+      /* Touch-friendly */
+      @media (hover: none) and (pointer: coarse) {
+        .quiz-card .card-action,
+        .logout-btn,
+        .theme-toggle,
+        .user-profile {
+          min-height: 44px;
         }
       }
     </style>
